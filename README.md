@@ -5,4 +5,4 @@
 > 🥁 We don't need no education  
 > 🎹 We don't need no thought control  
 > 🎸 No dark sarcasm in the classroom  
-> 🎙️ We don't need no substitute teacher  
+> 🎙️ Teacher, leave those kids alone    
