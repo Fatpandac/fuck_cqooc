@@ -6,11 +6,7 @@ name = "pypi"
 [packages]
 
 [dev-packages]
-black = "*"
 pre-commit = "*"
 
 [requires]
-python_version = "3.8"
-
-[scripts]
-black = "black ."
+python_version = "3"
