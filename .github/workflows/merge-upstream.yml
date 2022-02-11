@@ -1,0 +1,29 @@
+name: Scheduled Merge Remote Action
+on:
+  schedule:
+    - cron: '00 * * * *' # run every hour
+  workflow_dispatch:
+    inputs:
+      target_branch:
+        description: 'What branch do you want to be to sync?'
+        default: 'master'
+        required: true
+        type: string
+
+
+jobs:
+  merge-upstream:
+    if: github.repository_owner != 'Fatpandac'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ inputs.target_branch }}     # set the branch to merge to
+          fetch-depth: 0
+      - name: Merge Upstream ${{ inputs.target_branch }}
+        uses: exions/merge-upstream@v1
+        with:
+          upstream: Fatpandac/fuck_cqooc       # set the upstream repo
+          upstream-branch: master              # set the upstream branch to merge from
+          branch: ${{ inputs.target_branch }}  # set the branch to merge to
