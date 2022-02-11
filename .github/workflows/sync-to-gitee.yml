@@ -2,7 +2,7 @@ name: sync -> gitee
 on:
   push:
     branches:
-      - main
+      - master
 jobs:
   repo-sync:
     env:
