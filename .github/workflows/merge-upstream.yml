@@ -1,15 +1,11 @@
 name: Scheduled Merge Remote Action
+
 on:
   schedule:
     - cron: '00 * * * *' # run every hour
-  workflow_dispatch:
-    inputs:
-      target_branch:
-        description: 'What branch do you want to be to sync?'
-        default: 'master'
-        required: true
-        type: string
 
+env:
+  target_branch: ${{ secrets.target_branch && secrets.target_branch || 'master' }}
 
 jobs:
   merge-upstream:
@@ -19,11 +15,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
         with:
-          ref: ${{ inputs.target_branch }}     # set the branch to merge to
+          ref: ${{ env.target_branch }}     # set the branch to merge to
           fetch-depth: 0
-      - name: Merge Upstream ${{ inputs.target_branch }}
+      - name: Merge Upstream ${{ env.target_branch }}
         uses: exions/merge-upstream@v1
         with:
           upstream: Fatpandac/fuck_cqooc       # set the upstream repo
           upstream-branch: master              # set the upstream branch to merge from
-          branch: ${{ inputs.target_branch }}  # set the branch to merge to
+          branch: ${{ env.target_branch }}  # set the branch to merge to
