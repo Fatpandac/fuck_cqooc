@@ -2,7 +2,7 @@ name: Scheduled Merge Remote Action
 
 on:
   schedule:
-    - cron: '00 * * * *' # run every hour
+    - cron: '0 23 * * *' # run every hour
 
 env:
   target_branch: ${{ secrets.target_branch && secrets.target_branch || 'master' }}
