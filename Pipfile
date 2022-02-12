@@ -4,9 +4,13 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
+requests = "*"
 
 [dev-packages]
 pre-commit = "*"
+pytest = "*"
+pytest-cov = "*"
+pytest-sugar = "*"
 
 [requires]
 python_version = "3"
