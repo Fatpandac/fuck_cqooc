@@ -1,3 +1,6 @@
+ci:
+  skip: [pytest]
+
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v4.1.0
@@ -18,7 +21,7 @@ repos:
   - repo: local
     hooks:
       - id: pytest
-        name: Check putest
+        name: Check pytest
         entry: pipenv run pytest --cov=src --cov-report=html --cov-fail-under=100
         pass_filenames: false
         language: system

@@ -1,25 +1,10 @@
 # -*- coding: utf-8 -*-
+from src.core.config import Config
+
+
 class Core:
     def __init__(self, xsid=None):
-        if xsid:
-            self.__xsid = self.__set_xsid(xsid)
-        else:
-            if self.__get_xsid():
-                self.__xsid = self.__get_xsid()
-            else:
-                raise Exception("No XSID found")
+        self.__config = Config(xsid)
 
-    def __set_xsid(self, xsid) -> str:
-        with open("./cookies.txt", "w") as f:
-            f.write(xsid)
-        return xsid
-
-    def __get_xsid(self) -> str:
-        try:
-            with open("./cookies.txt", "r") as f:
-                return f.read()
-        except FileNotFoundError:
-            return None
-
-    def get_xsid(self) -> str:
-        return self.__xsid
+    def get_headers(self) -> str:
+        return self.__config.get_headers()
