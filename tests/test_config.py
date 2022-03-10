@@ -15,44 +15,31 @@ proxies = {
 
 proxiesURI = "http://127.0.0.1:8080"
 
-pwd = "12345678"
-username = "test"
-
-
-def test_get_pwd():
-    config = Config(pwd, username)
-    assert config.get_pwd() == pwd
-
-
-def test_get_username():
-    config = Config(pwd, username)
-    assert config.get_username() == username
-
 
 def test_get_ua():
-    config = Config(pwd, username)
+    config = Config()
     assert config.get_headers()["User-Agent"] == ua
 
 
 def test_set_cookie_into_headers():
-    config = Config(pwd, username)
+    config = Config()
     config.set_headers("cookie", "12345678")
     assert config.get_headers()["cookie"] == "12345678"
 
 
 def test_del_cookie():
-    config = Config(pwd, username)
+    config = Config()
     config.del_headers("cookie")
     assert "cookie" not in config.get_headers()
 
 
 def test_get_proxies():
-    config = Config(pwd, username)
+    config = Config()
     assert config.get_proxies() == proxies
 
 
 def test_set_proxies():
-    config = Config(pwd, username)
+    config = Config()
     config.set_proxies("http", proxiesURI)
     assert config.get_proxies()["http"] == proxiesURI
     config.set_proxies("http", "")

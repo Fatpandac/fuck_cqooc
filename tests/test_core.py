@@ -4,7 +4,7 @@ from src.core.core import Core
 import os
 
 
-ROOT_PATH = os.path.dirname(os.path.dirname(__file__))
+# ROOT_PATH = os.path.dirname(os.path.dirname(__file__))
 
 username = os.environ.get("USERNAME")
 password = os.environ.get("PASSWORD")

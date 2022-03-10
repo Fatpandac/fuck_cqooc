@@ -14,16 +14,6 @@ class Config:
         "https": "",
     }
 
-    def __init__(self, pwd: str, username: str):
-        self.__pwd = pwd
-        self.__username = username
-
-    def get_pwd(self):
-        return self.__pwd
-
-    def get_username(self):
-        return self.__username
-
     def set_headers(self, name: str, value: str):
         self.__headers[name] = value
 
