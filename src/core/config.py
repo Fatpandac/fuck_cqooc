@@ -1,33 +1,40 @@
 # -*- coding: utf-8 -*-
 class Config:
-    def __init__(self, xsid):
-        if xsid:
-            self.__xsid = self.__set_xsid(xsid)
-        else:
-            if self.__get_xsid():
-                self.__xsid = self.__get_xsid()
-            else:
-                raise Exception("No XSID found")
-        self.__ua = (
-            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit"
-            + "/537.36 (KHTML, like Gecko) Chrome/79.0.3945.130 Safari/537.36"
-        )
-        self.__headers = {
-            "User-Agent": self.__ua,
-            "Cookie": f"xsid={self.__xsid};",
-        }
 
-    def __set_xsid(self, xsid) -> str:
-        with open("./cookies.txt", "w") as f:
-            f.write(xsid)
-        return xsid
+    __ua = (
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit"
+        + "/537.36 (KHTML, like Gecko) Chrome/79.0.3945.130 Safari/537.36"
+    )
 
-    def __get_xsid(self) -> str:
-        try:
-            with open("./cookies.txt", "r") as f:
-                return f.read()
-        except FileNotFoundError:
-            return None
+    __headers = {
+        "User-Agent": __ua,
+    }
+    __proxies = {
+        "http": "",
+        "https": "",
+    }
 
-    def get_headers(self) -> dict:
+    def __init__(self, pwd: str, username: str):
+        self.__pwd = pwd
+        self.__username = username
+
+    def get_pwd(self):
+        return self.__pwd
+
+    def get_username(self):
+        return self.__username
+
+    def set_headers(self, name: str, value: str):
+        self.__headers[name] = value
+
+    def del_headers(self, name: str):
+        del self.__headers[name]
+
+    def get_headers(self):
         return self.__headers
+
+    def set_proxies(self, name: str, value: str):
+        self.__proxies[name] = value
+
+    def get_proxies(self):
+        return self.__proxies

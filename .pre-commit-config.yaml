@@ -22,7 +22,7 @@ repos:
     hooks:
       - id: pytest
         name: Check pytest
-        entry: pipenv run pytest --cov=src --cov-report=html --cov-fail-under=100
+        entry: pipenv run pytest --cov=src --cov-report=html --cov-fail-under=100 --cov-config ./tests/.coveragerc
         pass_filenames: false
         language: system
         types: [python]
