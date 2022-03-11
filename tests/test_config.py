@@ -13,7 +13,7 @@ proxies = {
     "https": "",
 }
 
-proxiesURI = "http://127.0.0.1:8080"
+proxiesURI = "http://127.0.0.1:8889"
 
 
 def test_get_ua():
@@ -43,3 +43,30 @@ def test_set_proxies():
     config.set_proxies("http", proxiesURI)
     assert config.get_proxies()["http"] == proxiesURI
     config.set_proxies("http", "")
+
+
+def test_do_get():
+    config = Config()
+    res = config.do_get(
+        "https://www.google.com",
+        proxies={
+            "http": "http://127.0.0.1:8889",
+            "https": "http://127.0.0.1:8889",
+        },
+    )
+    assert res.status_code == 200
+
+
+def test_do_post():
+    config = Config()
+    res = config.do_post(
+        "https://reqbin.com/sample/post/json",
+        headers={
+            "User-Agent": ua,
+        },
+        proxies={
+            "http": "http://127.0.0.1:8889",
+            "https": "http://127.0.0.1:8889",
+        },
+    )
+    assert res.status_code == 200
