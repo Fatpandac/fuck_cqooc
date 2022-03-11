@@ -61,18 +61,37 @@ class Core:
     def get_user_info(self) -> dict:
         return self.__user.get_info()
 
-    def get_class(self, limit: int = 20) -> dict:
+    def get_course(self, limit: int = 20) -> dict:
         class_url = (
             "http://www.cqooc.com/json/mcs?sortby=id&reverse=true&del=2"
             + f"&courseType=2&ownerId={self.__user.get_id()}&limit={limit}"
             + f"&ts={self.__get_ts()}"
         )
-        class_res = self.__config.do_get(
+        course_res = self.__config.do_get(
             class_url,
             headers={
                 "Referer": "http://www.cqooc.com/my/learn",
                 "Host": "www.cqooc.com",
             },
         )
-        class_data = json.loads(class_res.text)
+        class_data = json.loads(course_res.text)
         return Msg().prosecess("获取成功", 200, class_data)
+
+    def get_course_lessons(
+        self, course_id: str, start: int = 0, limit: int = 200
+    ) -> dict:
+        lessons_url = (
+            "http://www.cqooc.com/json/mooc/lessons"
+            + f"?limit={limit}&start=0&sortby=selfId&reverse=false"
+            + f"&courseId={course_id}&ts={int(time.time() * 1000)}"
+        )
+        lessons_res = self.__config.do_get(
+            lessons_url,
+            headers={
+                "referer": "http://www.cqooc.com/learn"
+                + "/mooc/structure?id=334569063",
+                "host": "www.cqooc.com",
+            },
+        )
+        lessons_data = json.loads(lessons_res.text)
+        return Msg().prosecess("获取成功", 200, lessons_data)

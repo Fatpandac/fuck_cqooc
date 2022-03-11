@@ -38,10 +38,19 @@ def test_get_info():
     assert res["avatar"] is None
 
 
-def test_get_class():
+def test_get_course():
     core = Core(username, password)
     core.login()
-    res = core.get_class()
+    res = core.get_course()
+    assert res["code"] == 200
+    assert res["status"] == "ok"
+    assert res["data"] is not None
+
+
+def test_get_course_lessons():
+    core = Core(username, password)
+    core.login()
+    res = core.get_course_lessons(core.get_course()["data"][0]["courseId"])
     assert res["code"] == 200
     assert res["status"] == "ok"
     assert res["data"] is not None
