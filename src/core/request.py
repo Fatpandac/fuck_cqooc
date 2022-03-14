@@ -2,20 +2,17 @@
 import requests
 
 
-class Config:
-
-    __ua = (
-        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit"
-        + "/537.36 (KHTML, like Gecko) Chrome/79.0.3945.130 Safari/537.36"
-    )
-
-    __headers = {
-        "User-Agent": __ua,
-    }
-    __proxies = {
-        "http": "",
-        "https": "",
-    }
+class Request:
+    def __init__(self):
+        self.__headers = {
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"
+            + " AppleWebKit/537.36 (KHTML, like Gecko) "
+            + "Chrome/79.0.3945.130 Safari/537.36",
+        }
+        self.__proxies = {
+            "http": "",
+            "https": "",
+        }
 
     def set_headers(self, name: str, value: str) -> None:
         self.__headers[name] = value

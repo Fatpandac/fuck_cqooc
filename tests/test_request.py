@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from src.core.config import Config
+from src.core.request import Request
 
 
 ua = (
@@ -17,37 +17,38 @@ proxiesURI = "http://127.0.0.1:8889"
 
 
 def test_get_ua():
-    config = Config()
-    assert config.get_headers()["User-Agent"] == ua
+    request = Request()
+    assert request.get_headers()["User-Agent"] == ua
 
 
 def test_set_cookie_into_headers():
-    config = Config()
-    config.set_headers("cookie", "12345678")
-    assert config.get_headers()["cookie"] == "12345678"
+    request = Request()
+    request.set_headers("cookie", "12345678")
+    assert request.get_headers()["cookie"] == "12345678"
 
 
 def test_del_cookie():
-    config = Config()
-    config.del_headers("cookie")
-    assert "cookie" not in config.get_headers()
+    request = Request()
+    request.set_headers("cookie", "12345678")
+    request.del_headers("cookie")
+    assert "cookie" not in request.get_headers()
 
 
 def test_get_proxies():
-    config = Config()
-    assert config.get_proxies() == proxies
+    request = Request()
+    assert request.get_proxies() == proxies
 
 
 def test_set_proxies():
-    config = Config()
-    config.set_proxies("http", proxiesURI)
-    assert config.get_proxies()["http"] == proxiesURI
-    config.set_proxies("http", "")
+    request = Request()
+    request.set_proxies("http", proxiesURI)
+    assert request.get_proxies()["http"] == proxiesURI
+    request.set_proxies("http", "")
 
 
 def test_do_get():
-    config = Config()
-    res = config.do_get(
+    request = Request()
+    res = request.do_get(
         "https://www.google.com",
         proxies={
             "http": "http://127.0.0.1:8889",
@@ -58,9 +59,9 @@ def test_do_get():
 
 
 def test_do_post():
-    config = Config()
-    res = config.do_post(
-        "https://reqbin.com/sample/post/json",
+    request = Request()
+    res = request.do_post(
+        "https://sm.ms/api/v2",
         headers={
             "User-Agent": ua,
         },
@@ -69,4 +70,5 @@ def test_do_post():
             "https": "http://127.0.0.1:8889",
         },
     )
+    print(res.request.headers)
     assert res.status_code == 200

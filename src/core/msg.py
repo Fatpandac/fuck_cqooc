@@ -1,15 +1,14 @@
 # -*- coding: utf-8 -*-
 class Msg:
-
-    __sussess = {
-        "code": 200,
-        "status": "ok",
-    }
-
-    __fail = {
-        "code": 400,
-        "status": "fail",
-    }
+    def __init__(self):
+        self.__sussess = {
+            "code": 200,
+            "status": "ok",
+        }
+        self.__fail = {
+            "code": 400,
+            "status": "fail",
+        }
 
     def prosecess(self, msg: str, code: int, res: dict = {}) -> dict:
         if code == 200:
