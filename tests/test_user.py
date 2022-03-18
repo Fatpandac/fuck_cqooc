@@ -7,6 +7,8 @@ username = "122132421"
 pwd = "123456"
 name = "asad"
 avatar = "/saad"
+course_data = {"test"}
+lessons_data = {"test"}
 
 
 def test_init():
@@ -51,12 +53,26 @@ def test_get_and_set_avatar():
     assert user.get_avatar() == avatar
 
 
+def test_get_and_set_course_data():
+    user = User(username, pwd)
+    user.set_course_data(course_data)
+    assert user.get_course_data() == course_data
+
+
+def test_get_and_set_lesson_data():
+    user = User(username, pwd)
+    user.set_lessons_data(lessons_data)
+    assert user.get_lessons_data() == lessons_data
+
+
 def test_get_info():
     user = User(username, pwd)
     user.set_xsid(xsid)
     user.set_id(id)
     user.set_name(name)
     user.set_avatar(avatar)
+    user.set_course_data(course_data)
+    user.set_lessons_data(lessons_data)
     info = user.get_info()
     assert info["xsid"] == xsid
     assert info["id"] == id
@@ -64,3 +80,5 @@ def test_get_info():
     assert info["pwd"] == pwd
     assert info["name"] == name
     assert info["avatar"] == avatar
+    assert info["course_data"] == course_data
+    assert info["lessons_data"] == lessons_data

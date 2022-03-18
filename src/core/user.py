@@ -7,6 +7,8 @@ class User:
     __pwd = None
     __name = None
     __avatar = None
+    __course_data = None
+    __lessons_data = None
 
     def __init__(self, username: str, pwd: str) -> None:
         self.__username = username
@@ -42,11 +44,23 @@ class User:
     def get_name(self) -> str:
         return self.__name
 
-    def set_avatar(self, avatar: str):
+    def set_avatar(self, avatar: str) -> None:
         self.__avatar = avatar
 
     def get_avatar(self) -> str:
         return self.__avatar
+
+    def set_course_data(self, course_data: dict) -> None:
+        self.__course_data = course_data
+
+    def get_course_data(self) -> dict:
+        return self.__course_data
+
+    def set_lessons_data(self, lessons_data: dict) -> None:
+        self.__lessons_data = lessons_data
+
+    def get_lessons_data(self) -> dict:
+        return self.__lessons_data
 
     def get_info(self) -> dict:
         return {
@@ -56,4 +70,6 @@ class User:
             "pwd": self.__pwd,
             "name": self.__name,
             "avatar": self.__avatar,
+            "course_data": self.__course_data,
+            "lessons_data": self.__lessons_data,
         }

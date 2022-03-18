@@ -3,6 +3,9 @@ import requests
 
 
 class Request:
+
+    __host = "http://www.cqooc.com"
+
     def __init__(self):
         self.__headers = {
             "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"
@@ -29,7 +32,12 @@ class Request:
     def get_proxies(self) -> dict:
         return self.__proxies
 
-    def do_get(self, url: str, headers: dict = None, proxies: dict = None):
+    def get_host(self) -> str:
+        return self.__host
+
+    def do_get(
+        self, url: str, headers: dict = None, proxies: dict = None
+    ) -> requests.Response:
         self_headers = self.__headers
         if headers is not None:
             for key in headers:
@@ -46,7 +54,7 @@ class Request:
         data: dict = None,
         headers: dict = None,
         proxies: dict = None,
-    ):
+    ) -> requests.Response:
         self_headers = self.__headers
         if headers is not None:
             for key in headers:

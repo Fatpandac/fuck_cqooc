@@ -3,6 +3,7 @@ from src.core.request import Request
 from src.core.user import User
 from src.core.msg import Msg
 from src.core.test import test
+from src.core.processer import Processer
 
 import time
 import json
@@ -10,6 +11,7 @@ import json
 
 class Core:
     def __init__(self, username: str, pwd: str) -> None:
+        self.__processer = Processer()
         self.__request = Request()
         self.__user = User(username, pwd)
 
@@ -32,7 +34,9 @@ class Core:
         info_res = self.__request.do_get(info_api)
         info_data = json.loads(info_res.text)
         self.__user.set_name(info_data["name"])
-        self.__user.set_avatar(info_data["headimgurl"])
+        self.__user.set_avatar(
+            self.__request.get_host() + info_data["headimgurl"]
+        )
 
     def login(self) -> dict:
         get_nonce_api = f"http://www.cqooc.net/user/login?ts={self.__get_ts()}"
@@ -54,12 +58,12 @@ class Core:
             self.__user.set_xsid(data["xsid"])
             self.__request.set_headers("Cookie", f'xsid={data["xsid"]}')
             self.__process_user_info()
-            return Msg().prosecess("登录成功", 200, data)
+            return Msg().processing("登录成功", 200, data)
         else:
-            return Msg().prosecess("登录失败", 400, data)
+            return Msg().processing("登录失败", 400, data)
 
     def get_user_info(self) -> dict:
-        return self.__user.get_info()
+        return Msg().processing("登录成功", 200, self.__user.get_info())
 
     def get_course(self, limit: int = 20) -> dict:
         class_url = (
@@ -74,24 +78,42 @@ class Core:
                 "Host": "www.cqooc.com",
             },
         )
-        class_data = json.loads(course_res.text)
-        return Msg().prosecess("获取成功", 200, class_data)
+        course_data = self.__processer.process_course_data(course_res)
+        self.__user.set_course_data(course_data.copy())
+        return Msg().processing("获取成功", 200, course_data)
 
-    def get_course_lessons(
-        self, course_id: str, start: int = 0, limit: int = 200
-    ) -> dict:
+    def get_course_lessons(self, course_id: str, start: int = 0) -> dict:
+        limit = 100
         lessons_url = (
             "http://www.cqooc.com/json/mooc/lessons"
             + f"?limit={limit}&start=0&sortby=selfId&reverse=false"
-            + f"&courseId={course_id}&ts={int(time.time() * 1000)}"
+            + f"&courseId={course_id}&ts={self.__get_ts()}"
         )
         lessons_res = self.__request.do_get(
             lessons_url,
             headers={
                 "Referer": "http://www.cqooc.com/learn"
-                + "/mooc/structure?id=334569063",
+                + f"/mooc/structure?id={course_id}",
                 "host": "www.cqooc.com",
             },
         )
-        lessons_data = json.loads(lessons_res.text)
-        return Msg().prosecess("获取成功", 200, lessons_data)
+        lessons_status_url = (
+            "http://www.cqooc.com/json/learnLogs"
+            + f"?limit=100&start=1&courseId={course_id}&select=sectionId"
+            + f"&username={self.__user.get_username()}&ts={self.__get_ts()}"
+        )
+        lessons_status_res = self.__request.do_get(
+            lessons_status_url,
+            headers={
+                "Referer": (
+                    "http://www.cqooc.com/learn/mooc/progress"
+                    + f"?id={course_id}"
+                ),
+                "host": "www.cqooc.com",
+            },
+        )
+        lessons_data = self.__processer.process_lessons_data(
+            self.__user.get_username(), lessons_res, lessons_status_res
+        )
+        self.__user.set_lessons_data(lessons_data.copy())
+        return Msg().processing("获取成功", 200, lessons_data)
