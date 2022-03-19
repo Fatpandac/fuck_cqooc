@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from src.core.request import Request
+from src.request import Request
 
 
 ua = (

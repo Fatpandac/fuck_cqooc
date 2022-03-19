@@ -53,3 +53,20 @@ class ApiUrl:
             + f"?limit={limit}&start={start}&courseId={course_id}"
             + f"&select=sectionId&username={username}&ts={self.__get_ts()}"
         )
+
+    def mcs_id_api(self, owner_id: str, course_id: str) -> str:
+        return (
+            "http://www.cqooc.com/json/mcs"
+            + f"?ownerId={owner_id}&courseId={course_id}"
+            + f"&ts={self.__get_ts()}"
+        )
+
+    def learn_log_api(self, section_id: str, username: str) -> str:
+        return (
+            "http://www.cqooc.com/json/learnLogs"
+            + f"?sectionId={section_id}&username={username}"
+            + f"&ts={self.__get_ts()}"
+        )
+
+    def skip_section_api(self) -> str:
+        return "http://www.cqooc.com/learnLog/api/add"

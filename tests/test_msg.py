@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from src.core.msg import Msg
+from src.msg import Msg
 
 sussess = {"code": 200, "status": "ok", "msg": "成功"}
 

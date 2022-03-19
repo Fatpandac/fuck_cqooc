@@ -38,11 +38,11 @@ class Request:
     def do_get(
         self, url: str, headers: dict = None, proxies: dict = None
     ) -> requests.Response:
-        self_headers = self.__headers
+        self_headers = self.__headers.copy()
         if headers is not None:
             for key in headers:
                 self_headers[key] = headers[key]
-        self_proxies = self.__proxies
+        self_proxies = self.__proxies.copy()
         if proxies is not None:
             for key in proxies:
                 self_proxies[key] = proxies[key]
@@ -55,11 +55,11 @@ class Request:
         headers: dict = None,
         proxies: dict = None,
     ) -> requests.Response:
-        self_headers = self.__headers
+        self_headers = self.__headers.copy()
         if headers is not None:
             for key in headers:
                 self_headers[key] = headers[key]
-        self_proxies = self.__proxies
+        self_proxies = self.__proxies.copy()
         if proxies is not None:
             for key in proxies:
                 self_proxies[key] = proxies[key]

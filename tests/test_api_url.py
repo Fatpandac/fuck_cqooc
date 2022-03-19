@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from src.core.api_url import ApiUrl
+from src.api_url import ApiUrl
 
 import time
 
@@ -16,6 +16,8 @@ hash = "hash"
 nonce = "nonce"
 cn = "cn"
 course_id = "course_id"
+owner_id = "owner_id"
+section_id = "section_id"
 start = 0
 limit = 100
 
@@ -75,4 +77,29 @@ def test_lessons_status_api():
         "http://www.cqooc.com/json/learnLogs"
         + f"?limit={limit}&start={start}&courseId={course_id}&select=sectionId"
         + f"&username={username}&ts={get_ts()}"
+    )
+
+
+def test_mcs_id_api():
+    api_url = ApiUrl()
+    assert api_url.mcs_id_api(owner_id, course_id) == (
+        "http://www.cqooc.com/json/mcs"
+        + f"?ownerId={owner_id}&courseId={course_id}"
+        + f"&ts={get_ts()}"
+    )
+
+
+def test_learn_log_api():
+    api_url = ApiUrl()
+    assert api_url.learn_log_api(section_id, username) == (
+        "http://www.cqooc.com/json/learnLogs"
+        + f"?sectionId={section_id}&username={username}"
+        + f"&ts={get_ts()}"
+    )
+
+
+def test_skip_section_api():
+    api_url = ApiUrl()
+    assert (
+        api_url.skip_section_api() == "http://www.cqooc.com/learnLog/api/add"
     )

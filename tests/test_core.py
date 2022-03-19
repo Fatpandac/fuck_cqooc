@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from src.core.core import Core
+from src.core import Core
 
 import os
 
@@ -18,12 +18,12 @@ def test_login_success():
 
 
 def test_login_fail():
-    username = "test"
-    password = "1234567"
-    core = Core(username, password)
+    username_fail = "test"
+    password_fail = "1234567"
+    core = Core(username_fail, password_fail)
     res = core.login()
     assert res["code"] == 400
-    assert res["msg"] == "登录失败"
+    assert res["msg"] == "登录失败，可能需要官网登录后重试"
     assert res["status"] == "fail"
 
 

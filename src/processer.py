@@ -41,6 +41,7 @@ class Processer:
                     "courseId": lesson["courseId"],
                     "ownerId": lesson["ownerId"],
                     "parentId": lesson["parentId"],
+                    "id": lesson["id"],
                     "username": username,
                 }
             )
@@ -58,3 +59,15 @@ class Processer:
             lessons_data["data"], key=lambda x: x["sectionId"]
         )
         return lessons_data
+
+    def process_section_data(self, section_data: dict, mcs_id: str) -> dict:
+        post_data = {}
+        post_data["action"] = 0
+        post_data["category"] = 2
+        post_data["chapterId"] = section_data["chapterId"]
+        post_data["courseId"] = section_data["courseId"]
+        post_data["ownerId"] = int(section_data["ownerId"])
+        post_data["parentId"] = mcs_id
+        post_data["sectionId"] = section_data["sectionId"]
+        post_data["username"] = section_data["username"]
+        return post_data

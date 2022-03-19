@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from src.core.user import User
+from src.user import User
 
 xsid = "ASD121AS1"
 id = 121324
@@ -63,6 +63,12 @@ def test_get_and_set_lesson_data():
     user = User(username, pwd)
     user.set_lessons_data(lessons_data)
     assert user.get_lessons_data() == lessons_data
+
+
+def test_get_and_set_mcs_id():
+    user = User(username, pwd)
+    user.set_mcs_id(id)
+    assert user.get_mcs_id() == id
 
 
 def test_get_info():

@@ -19,5 +19,6 @@ class Msg:
             res["code"] = self.__fail["code"]
             res["status"] = self.__fail["status"]
             res["msg"] = msg
+            res["data"] = None
 
         return res

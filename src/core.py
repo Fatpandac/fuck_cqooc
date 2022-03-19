@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
-from src.core.request import Request
-from src.core.user import User
-from src.core.msg import Msg
-from src.core.test import test
-from src.core.processer import Processer
-from src.core.api_url import ApiUrl
+from src.request import Request
+from src.user import User
+from src.msg import Msg
+from src.test import test
+from src.processer import Processer
+from src.api_url import ApiUrl
 
 import json
 
@@ -50,7 +50,7 @@ class Core:
             self.__process_user_info()
             return Msg().processing("登录成功", 200, data)
         else:
-            return Msg().processing("登录失败", 400, data)
+            return Msg().processing("登录失败，可能需要官网登录后重试", 400, data)
 
     def get_user_info(self) -> dict:
         return Msg().processing("登录成功", 200, self.__user.get_info())
@@ -65,9 +65,18 @@ class Core:
         )
         course_data = self.__processer.process_course_data(course_res)
         self.__user.set_course_data(course_data.copy())
-        return Msg().processing("获取成功", 200, course_data)
+        return Msg().processing("获取课程成功", 200, self.__user.get_course_data())
 
     def get_course_lessons(self, course_id: str) -> dict:
+        mcs_id_res = self.__request.do_get(
+            self.__api_url.mcs_id_api(self.__user.get_id(), course_id),
+            headers={
+                "Referer": "http://www.cqooc.com/my/learn",
+                "Host": "www.cqooc.com",
+            },
+        )
+        mcs_id_data = json.loads(mcs_id_res.text)
+        self.__user.set_mcs_id(mcs_id_data["data"][0]["id"])
         lessons_res = self.__request.do_get(
             self.__api_url.lessons_api(course_id),
             headers={
@@ -92,4 +101,35 @@ class Core:
             self.__user.get_username(), lessons_res, lessons_status_res
         )
         self.__user.set_lessons_data(lessons_data.copy())
-        return Msg().processing("获取成功", 200, lessons_data)
+        return Msg().processing(
+            "获取课程课时成功", 200, self.__user.get_lessons_data()
+        )
+
+    def skip_section(self, section_id: str) -> dict:
+        section_data = list(
+            filter(
+                lambda d: d["id"] == section_id,
+                self.__user.get_lessons_data()["data"],
+            )
+        )[0]
+        post_data = self.__processer.process_section_data(
+            section_data, self.__user.get_mcs_id()
+        )
+        skip_res = self.__request.do_post(
+            self.__api_url.skip_section_api(),
+            data=json.dumps(post_data),
+            headers={
+                "Referer": "http://www.cqooc.com/learn/mooc/structure?id="
+                + section_data["courseId"],
+                "Host": "www.cqooc.com",
+            },
+        )
+        status_code = json.loads(skip_res.text)["code"]
+        if status_code == 2:
+            return Msg().processing("已经跳过该课程", 200)
+        elif status_code == 0:
+            return Msg().processing("跳过课程成功", 200)
+        elif status_code == 1:
+            return Msg().processing("非法操作", 400)
+        else:
+            return Msg().processing("跳过课程失败", 400)

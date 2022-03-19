@@ -9,6 +9,7 @@ class User:
     __avatar = None
     __course_data = None
     __lessons_data = None
+    __mcs_id = None
 
     def __init__(self, username: str, pwd: str) -> None:
         self.__username = username
@@ -62,6 +63,12 @@ class User:
     def get_lessons_data(self) -> dict:
         return self.__lessons_data
 
+    def set_mcs_id(self, mcs_id: str) -> None:
+        self.__mcs_id = mcs_id
+
+    def get_mcs_id(self) -> str:
+        return self.__mcs_id
+
     def get_info(self) -> dict:
         return {
             "xsid": self.__xsid,
@@ -70,6 +77,7 @@ class User:
             "pwd": self.__pwd,
             "name": self.__name,
             "avatar": self.__avatar,
+            "mcs_id": self.__mcs_id,
             "course_data": self.__course_data,
             "lessons_data": self.__lessons_data,
         }
