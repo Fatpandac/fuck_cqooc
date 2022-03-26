@@ -1,10 +1,7 @@
 # -*- coding: utf-8 -*-
-
-import sys
-
-sys.path.append("..")
 from src.core import Core
 
+import sys
 import tkinter
 import ttkbootstrap as ttk
 from ttkbootstrap.constants import X
