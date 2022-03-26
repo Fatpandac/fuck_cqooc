@@ -255,6 +255,3 @@ class dashboardRoot(ttk.Window):
         for i in self.treeLesson.get_children():
             self.treeLesson.delete(i)
         self.displayLessonsById()
-
-if __name__ == "__main__":
-    dashboardRoot().mainloop()
