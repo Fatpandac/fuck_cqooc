@@ -6,11 +6,19 @@ from src.core import Core
 
 import tkinter
 import ttkbootstrap as ttk
-from ttkbootstrap.constants import *
+from ttkbootstrap.constants import X
+from ttkbootstrap.constants import YES
+from ttkbootstrap.constants import LEFT
+from ttkbootstrap.constants import NE
+from ttkbootstrap.constants import BOTH
+from ttkbootstrap.constants import HEADINGS
+from ttkbootstrap.constants import END
+from ttkbootstrap.constants import INTO
+from ttkbootstrap.constants import OUTLINE
+from ttkbootstrap.constants import INFO
 from ttkbootstrap.dialogs import Messagebox
 from ttkbootstrap.dialogs import MessageDialog
 from ttkbootstrap.icons import Icon
-from tkinter.ttk import Style
 from time import sleep
 
 
@@ -161,7 +169,9 @@ class dashboardRoot(ttk.Window):
             self.geometry("1000x500")
             self.disposeLoginFrame()
             self.setupDashboardFrame()
-            infoMessage = "因为重庆高校在线课程平台服务器的管控策略，短时间跳过太多\000\n可能会遭到网站临时屏蔽。因此，跳过每个任务之间都会间隔一\000\n段时间。\n跳过某一门课程之前，请先注意这门课程是否已经结束。"
+            infoMessage = "因为重庆高校在线课程平台服务器的管控策略，短时间跳过太多\000\n"
+            infoMessage += "可能会遭到网站临时屏蔽。因此，跳过每个任务之间都会间隔一\000\n段时间。\n"
+            infoMessage += "跳过某一门课程之前，请先注意这门课程是否已经结束。"
             MessageDialog(
                 message=infoMessage,
                 title="提示",
