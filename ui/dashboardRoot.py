@@ -1,32 +1,36 @@
 # -*- coding: utf-8 -*-
-import sys
-import tkinter
 
-from matplotlib.pyplot import text
+import sys
 sys.path.append('..')
 from src.core import Core
 
+import tkinter
 import ttkbootstrap as ttk
 from ttkbootstrap.constants import *
 from ttkbootstrap.dialogs import Messagebox
+from ttkbootstrap.dialogs import MessageDialog
+from ttkbootstrap.icons import Icon
 from tkinter.ttk import Style
+from time import sleep
+
 
 class dashboardRoot(ttk.Window):
     def __init__(self) -> None:
         super().__init__()
 
         self.core = None
+        self.courseID = None
 
         # 设置基础视图
         self.title("fuck_cqooc")
         self.geometry("800x500")
-        self.resizable(False,False)
+        self.resizable(False, False)
 
         # 定义控件
-        self.root = ttk.Frame(self,padding=10)
+        self.root = ttk.Frame(self, padding=10)
         self.setupLoginFrame()
         # 根
-        self.root.pack(fill=X,expand=YES)
+        self.root.pack(fill=X, expand=YES)
 
     def start(self) -> None:
         '''启动登录界面'''
@@ -38,33 +42,39 @@ class dashboardRoot(ttk.Window):
         self.labelWelcome = ttk.Label(self.loginFrame, text="fuck_cqooc")
 
         self.usernameFrame = ttk.Frame(self.loginFrame)
-        self.labelUsername = ttk.Label(self.usernameFrame, text="用户名:",width=6)
+        self.labelUsername = ttk.Label(
+            self.usernameFrame, text="用户名:", width=6)
         self.varUsername = ttk.StringVar(self.usernameFrame)
-        self.entryUsername = ttk.Entry(self.usernameFrame, width=200, textvariable=self.varUsername)
+        self.entryUsername = ttk.Entry(
+            self.usernameFrame, width=200, textvariable=self.varUsername)
 
         self.passwordFrame = ttk.Frame(self.loginFrame)
-        self.labelPassword = ttk.Label(self.passwordFrame, text="密码:",width=6)
+        self.labelPassword = ttk.Label(self.passwordFrame, text="密码:", width=6)
         self.varPassword = ttk.StringVar(self.passwordFrame)
-        self.entryPassword = ttk.Entry(self.passwordFrame, width=200, textvariable=self.varPassword, show="*")
+        self.entryPassword = ttk.Entry(
+            self.passwordFrame, width=200, textvariable=self.varPassword, show="*")
 
-        self.buttonLogin = ttk.Button(self.loginFrame, text="登录", command=self.login, width=30)
-        
+        self.buttonLogin = ttk.Button(
+            self.loginFrame, text="登录", command=self.login, width=30)
+
         # 提示语部分
         self.labelWelcome.pack(pady=10)
-        self.labelWelcome.config(font=('Helvetical bold',15))
+        self.labelWelcome.config(font=('Microsoft Yahei', 15))
 
         # 用户名模块
-        self.labelUsername.pack(side=LEFT, anchor=NE, pady=(10,0), fill=X)
-        self.entryUsername.pack(side=LEFT, padx=(10, 0), pady=(10,0), expand=YES, fill=BOTH)
+        self.labelUsername.pack(side=LEFT, anchor=NE, pady=(10, 0), fill=X)
+        self.entryUsername.pack(side=LEFT, padx=(
+            10, 0), pady=(10, 0), expand=YES, fill=BOTH)
         self.usernameFrame.pack()
 
         # 密码模块
-        self.labelPassword.pack(side=LEFT, anchor=NE, pady=(10,0), fill=X)
-        self.entryPassword.pack(side=LEFT, padx=(10, 0), pady=(10,0), expand=YES, fill=BOTH)
+        self.labelPassword.pack(side=LEFT, anchor=NE, pady=(10, 0), fill=X)
+        self.entryPassword.pack(side=LEFT, padx=(
+            10, 0), pady=(10, 0), expand=YES, fill=BOTH)
         self.passwordFrame.pack()
 
         # 登录按钮
-        self.buttonLogin.pack(pady=(10,0))
+        self.buttonLogin.pack(pady=(10, 0))
         # 整个登录模块
         self.loginFrame.pack()
 
@@ -88,45 +98,52 @@ class dashboardRoot(ttk.Window):
         self.actionFrame.pack()
 
         # 设置顶部状态提示语
-        self.labelWelcome = ttk.Label(self.welcomeFrame,text=f"当前登录用户为{self.varUsername.get()}")
-        self.labelWelcome.config(font=('Helvetical bold',15))
-        self.labelWelcome.pack(side=LEFT, padx=(20,0),pady=(0,20))
+        self.labelWelcome = ttk.Label(
+            self.welcomeFrame, text=f"当前登录用户为{self.varUsername.get()}")
+        self.labelWelcome.config(font=('Microsoft Yahei', 15))
+        self.labelWelcome.pack(side=LEFT, padx=(20, 0), pady=(0, 20))
 
         # 设置课程列表
-        self.treeCourse = ttk.Treeview(master=self.courseFrame,columns=[0],show=HEADINGS,height=10)
+        self.treeCourse = ttk.Treeview(master=self.courseFrame, columns=[
+                                        0], show=HEADINGS, height=10)
         self.courseList = self.getCourseDict()['course']
         for i in self.courseList:
             t = (i[0],)
-            self.treeCourse.insert("",END,values=t)
-        self.treeCourse.heading(0,text="课程名称")
-        self.treeCourse.column(0,width=400)
-        self.treeCourse.bind('<<TreeviewSelect>>',self.displayLessons)
+            self.treeCourse.insert("", END, values=t)
+        self.treeCourse.heading(0, text="课程名称")
+        self.treeCourse.column(0, width=400)
+        self.treeCourse.bind('<<TreeviewSelect>>', self.displayLessonsByEvent)
         self.treeCourse.pack(side=LEFT)
 
         # 设置任务列表
-        self.treeLesson = ttk.Treeview(master=self.lessonFrame,columns=[0,1,2,3],show=HEADINGS,height=10)
-        self.treeLesson.insert("",END,values=("☐","点击左侧列表课程来选择","未完成",'1000'))
-        self.treeLesson.heading(0,text="勾选")
-        self.treeLesson.heading(1,text="任务名称")
-        self.treeLesson.heading(2,text="完成情况")
-        self.treeLesson.heading(3,text="sectionID")
-        self.treeLesson.column(0,width=50)
-        self.treeLesson.column(1,width=350)
-        self.treeLesson.column(2,width=100)
-        self.treeLesson.column(3,width=0)
-        self.treeLesson["displaycolumns"] = [0,1,2]
-        self.treeLesson.bind('<<TreeviewSelect>>',self.processCheckbox)
+        self.treeLesson = ttk.Treeview(master=self.lessonFrame, columns=[
+                                        0, 1, 2, 3], show=HEADINGS, height=10)
+        self.treeLesson.insert("", END, values=(
+            "☐", "点击左侧列表课程来选择", "未完成", '1000'))
+        self.treeLesson.heading(0, text="勾选")
+        self.treeLesson.heading(1, text="任务名称")
+        self.treeLesson.heading(2, text="完成情况")
+        self.treeLesson.heading(3, text="sectionID")
+        self.treeLesson.column(0, width=50)
+        self.treeLesson.column(1, width=350)
+        self.treeLesson.column(2, width=100)
+        self.treeLesson.column(3, width=0)
+        self.treeLesson["displaycolumns"] = [0, 1, 2]
+        self.treeLesson.bind('<<TreeviewSelect>>', self.processCheckbox)
         self.treeLesson.pack(side=LEFT)
 
         # 设置功能按钮
-        self.buttonExit = ttk.Button(master=self.actionFrame,text="退出", bootstyle=(INFO, OUTLINE),command=sys.exit,width=10)
-        self.buttonSelectAll = ttk.Button(master=self.actionFrame,text="全选", bootstyle=(INFO, OUTLINE),width=10)
-        self.buttonProceed = ttk.Button(master=self.actionFrame,text="fuck", bootstyle=SUCCESS,width=10)
-        self.buttonSelectAll.bind('<Button-1>',self.selectAll)
-        # self.buttonProceed.bind('<Button-1>',self.proceedTask)
-        self.buttonExit.pack(side=LEFT,pady=(20,0))
-        self.buttonSelectAll.pack(side=LEFT,padx=(400,0),pady=(20,0))
-        self.buttonProceed.pack(side=LEFT,padx=(50,0),pady=(20,0))
+        self.buttonExit = ttk.Button(master=self.actionFrame, text="退出", bootstyle=(
+            INFO, OUTLINE), command=sys.exit, width=10)
+        self.buttonSelectAll = ttk.Button(
+            master=self.actionFrame, text="全选", bootstyle=(INFO, OUTLINE), width=10)
+        self.buttonProceed = ttk.Button(
+            master=self.actionFrame, text="fuck", bootstyle=SUCCESS, width=10)
+        self.buttonSelectAll.bind('<Button-1>', self.selectAll)
+        self.buttonProceed.bind('<Button-1>',self.proceedTask)
+        self.buttonExit.pack(side=LEFT, pady=(20, 0))
+        self.buttonSelectAll.pack(side=LEFT, padx=(400, 0), pady=(20, 0))
+        self.buttonProceed.pack(side=LEFT, padx=(50, 0), pady=(20, 0))
 
     def login(self) -> None:
         '''登录'''
@@ -138,14 +155,24 @@ class dashboardRoot(ttk.Window):
 
         self.core = Core(username, password)
         loginResult = self.core.login()
-        
+
         self.buttonLogin["text"] = "登录"
         if loginResult["status"] == 'ok':
             self.geometry("1000x500")
             self.disposeLoginFrame()
             self.setupDashboardFrame()
+            infoMessage = "因为重庆高校在线课程平台服务器的管控策略，短时间跳过太多\000\n可能会遭到网站临时屏蔽。因此，跳过每个任务之间都会间隔一\000\n段时间。\n跳过某一门课程之前，请先注意这门课程是否已经结束。"
+            MessageDialog(
+                message=infoMessage,
+                title="提示",
+                parent=None,
+                buttons=["我知道了:primary"],
+                icon=Icon.info,
+                localize=True
+            ).show(None)
         else:
-            Messagebox.show_error("登录失败。\n1. 你的用户名或密码可能有误\n2. 你可能需要前往网站手动登录，然后再试一次", "提示")
+            Messagebox.show_error(
+                "登录失败。\n1. 你的用户名或密码可能有误\n2. 你可能需要前往网站手动登录，然后再试一次", "提示")
 
     def getCourseDict(self) -> dict:
         courseDict = dict()
@@ -157,39 +184,77 @@ class dashboardRoot(ttk.Window):
         courseDict['course'] = courseList
         return courseDict
 
-    def displayLessons(self,e:tkinter.Event) -> None:
+    def displayLessonsByEvent(self, e: tkinter.Event) -> None:
         selection = e.widget.item(e.widget.selection()[0])['values']
         for i in self.courseList:
             if i[0] == selection[0]:
                 courseID = i[1]
+        self.courseID = courseID
         taskData = self.core.get_course_lessons(course_id=courseID)
         taskList = list()
         for i in taskData['data']:
-            if i['category'] not in ['2','3']:# 判断是不是测验
+            if i['category'] not in ['2', '3']:  # 判断是不是测验
                 name = i['title']
-                status = "已完成" if i['status'] == 1 else "未完成"
+                status = "完成" if i['status'] == 1 else "未完成"
                 sectionID = i['sectionId']
-                taskList.append(('☐',name,status,sectionID))
+                taskList.append(('☐', name, status, sectionID))
         # 清空列表
         for i in self.treeLesson.get_children():
             self.treeLesson.delete(i)
         for i in taskList:
-            self.treeLesson.insert("",END,values=i)
+            self.treeLesson.insert("", END, values=i)
 
-    def processCheckbox(self,e:tkinter.Event):
+    def displayLessonsById(self) -> None:
+        taskData = self.core.get_course_lessons(course_id=self.courseID)
+        taskList = list()
+        for i in taskData['data']:
+            if i['category'] not in ['2', '3']:  # 判断是不是测验
+                name = i['title']
+                status = "完成" if i['status'] == 1 else "未完成"
+                sectionID = i['sectionId']
+                taskList.append(('☐', name, status, sectionID))
+        # 清空列表
+        for i in self.treeLesson.get_children():
+            self.treeLesson.delete(i)
+        for i in taskList:
+            self.treeLesson.insert("", END, values=i)
+
+    def processCheckbox(self, e: tkinter.Event) -> None:
         selection = e.widget.item(e.widget.selection()[0])['values']
         if selection[0] == '☐':
             selection[0] = '☑'
         elif selection[0] == '☑':
             selection[0] = '☐'
-        e.widget.item(e.widget.selection()[0],values=tuple(selection))
+        e.widget.item(e.widget.selection()[0], values=tuple(selection))
 
-    def selectAll(self,e:tkinter.Event):
+    def selectAll(self, e: tkinter.Event) -> None:
         for i in self.treeLesson.get_children():
             item = self.treeLesson.item(i)["values"]
             if item[0] == '☐':
                 item[0] = '☑'
-            self.treeLesson.item(i,values=item)
+            self.treeLesson.item(i, values=item)
+
+    def proceedTask(self, e: tkinter.Event) -> None:
+        successCount = 0
+        failCount = 0
+        sectionList = list()
+        for i in self.treeLesson.get_children():
+            item = self.treeLesson.item(i)["values"]
+            if item[0] == '☑':
+                sectionList.append(str(item[3]))
+        for i in sectionList:
+            result = self.core.skip_section(i)
+            if result['code'] == 200:
+                successCount += 1
+            else:
+                failCount += 1
+            if len(sectionList) != 1:
+                sleep(31)
+        Messagebox.show_info(f"跳过完成。\n成功跳过{successCount}个任务，失败{failCount}个。","提示")
+        # 清空列表
+        for i in self.treeLesson.get_children():
+            self.treeLesson.delete(i)
+        self.displayLessonsById()
 
 if __name__ == "__main__":
     dashboardRoot().mainloop()
