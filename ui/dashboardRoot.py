@@ -14,7 +14,6 @@ from ttkbootstrap.constants import NE
 from ttkbootstrap.constants import BOTH
 from ttkbootstrap.constants import HEADINGS
 from ttkbootstrap.constants import END
-from ttkbootstrap.constants import INTO
 from ttkbootstrap.constants import SUCCESS
 from ttkbootstrap.constants import OUTLINE
 from ttkbootstrap.constants import INFO
