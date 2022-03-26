@@ -6,6 +6,7 @@ name = "pypi"
 [packages]
 requests = "*"
 js2py = "*"
+ttkbootstrap = "*"
 
 [dev-packages]
 pre-commit = "*"
