@@ -46,3 +46,7 @@
 
 为了防止反复多次跳过任务，执行任务期间，程序会阻止按钮的点击，直到任务完成。
 如果程序进入无响应状态，跳过任务仍然在进行，请不要尝试关闭程序。
+
+## Special Thanks
+
+<img src="https://resources.jetbrains.com/storage/products/company/brand/logos/jb_beam.png" alt="JetBrains Logo (Main) logo." width="168">
