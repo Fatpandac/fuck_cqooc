@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import threading
 from src.core import Core
 
 import sys
@@ -18,6 +19,8 @@ from ttkbootstrap.dialogs import Messagebox
 from ttkbootstrap.dialogs import MessageDialog
 from ttkbootstrap.icons import Icon
 from time import sleep
+
+from ui.skipper import skipper
 
 
 class dashboardRoot(ttk.Window):
@@ -268,27 +271,29 @@ class dashboardRoot(ttk.Window):
             if item[0] == "☐":
                 item[0] = "☑"
             self.treeLesson.item(i, values=item)
+        
+    def proceedTaskAfter(self, skipper:skipper) -> None:
+        print("proceedAfter:",skipper.is_alive())
+        # 检查完成情况
+        if not skipper.is_alive():
+            Messagebox.show_info(
+                f"跳过完成。\n成功跳过{skipper.success}个任务，失败{skipper.fail}个。", "提示"
+            )
+            # 清空列表
+            for i in self.treeLesson.get_children():
+                self.treeLesson.delete(i)
+            self.displayLessonsById()
 
     def proceedTask(self, e: tkinter.Event) -> None:
-        successCount = 0
-        failCount = 0
         sectionList = list()
+        skipThread = None
+        skipDuration = 500
         for i in self.treeLesson.get_children():
             item = self.treeLesson.item(i)["values"]
             if item[0] == "☑":
                 sectionList.append(str(item[3]))
-        for i in sectionList:
-            result = self.core.skip_section(i)
-            if result["code"] == 200:
-                successCount += 1
-            else:
-                failCount += 1
-            if len(sectionList) != 1:
-                sleep(31)
-        Messagebox.show_info(
-            f"跳过完成。\n成功跳过{successCount}个任务，失败{failCount}个。", "提示"
-        )
-        # 清空列表
-        for i in self.treeLesson.get_children():
-            self.treeLesson.delete(i)
-        self.displayLessonsById()
+        if len(sectionList) != 1:
+            skipDuration += (31000 * len(sectionList))
+        skipThread = skipper(core=self.core, sectionList=sectionList)
+        skipThread.start()
+        self.after(skipDuration, self.proceedTaskAfter, skipThread)
