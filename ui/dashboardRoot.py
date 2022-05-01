@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-import threading
 from src.core import Core
 
 import sys
@@ -21,7 +20,6 @@ from ttkbootstrap.constants import NORMAL
 from ttkbootstrap.dialogs import Messagebox
 from ttkbootstrap.dialogs import MessageDialog
 from ttkbootstrap.icons import Icon
-from time import sleep
 
 from ui.skipper import skipper
 
