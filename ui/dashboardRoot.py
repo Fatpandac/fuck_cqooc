@@ -116,7 +116,7 @@ class dashboardRoot(ttk.Window):
         self.courseFrame.pack(side=LEFT)
         self.lessonFrame.pack(side=LEFT)
         self.actionFrame.pack()
-        self.progressFrame.pack(fill=X, expand=YES, pady=(20,0))
+        self.progressFrame.pack(fill=X, expand=YES, pady=(20, 0))
 
         # 设置顶部状态提示语
         self.labelWelcome = ttk.Label(
@@ -190,7 +190,7 @@ class dashboardRoot(ttk.Window):
             value=0,
             bootstyle=(SUCCESS, STRIPED),
         )
-        self.progressBar.pack(fill=X, padx=(30,30), expand=YES)
+        self.progressBar.pack(fill=X, padx=(30, 30), expand=YES)
 
     def login(self) -> None:
         """登录"""
@@ -283,8 +283,8 @@ class dashboardRoot(ttk.Window):
             if item[0] == "☐":
                 item[0] = "☑"
             self.treeLesson.item(i, values=item)
-        
-    def proceedTaskAfter(self, skipper:skipper) -> None:
+
+    def proceedTaskAfter(self, skipper: skipper) -> None:
         # 利用标志位检查完成情况
         if skipper.getState():
             # 执行完成
@@ -293,8 +293,8 @@ class dashboardRoot(ttk.Window):
                 f"跳过完成。\n成功跳过{skipper.success}个任务，失败{skipper.fail}个。", "提示"
             )
             # 恢复按钮到可点击状态
-            self.buttonSelectAll['state'] = tkinter.NORMAL
-            self.buttonProceed['state'] = tkinter.NORMAL
+            self.buttonSelectAll["state"] = tkinter.NORMAL
+            self.buttonProceed["state"] = tkinter.NORMAL
             # 清空列表
             for i in self.treeLesson.get_children():
                 self.treeLesson.delete(i)
@@ -303,13 +303,15 @@ class dashboardRoot(ttk.Window):
             # 未完成则需要继续回调
             self.after(self.skipInterval, self.proceedTaskAfter, skipper)
 
-    def incrementProgressBar(self, args:list) -> None:
-        '''传递参数列表中，间隔时间为列表元素1，执行次数为元素2'''
+    def incrementProgressBar(self, args: list) -> None:
+        """传递参数列表中，间隔时间为列表元素1，执行次数为元素2"""
         countDown = args[1]
         if not countDown == 0:
             self.progressBar["value"] += 0.1
             args[1] -= 1
-            self.progressBar.after(int(args[0]), self.incrementProgressBar, args)
+            self.progressBar.after(
+                int(args[0]), self.incrementProgressBar, args
+            )
 
     def proceedTask(self, e: tkinter.Event) -> None:
         sectionList = list()
@@ -327,7 +329,7 @@ class dashboardRoot(ttk.Window):
         # 默认检查间隔是1秒。如果任务数量大于1，就改为31秒
         # 额外增加了500ms，防止出现检查的时候当前的单个任务差一点就完成的情况
         if len(sectionList) != 1:
-            self.skipInterval = (31000 + 500)
+            self.skipInterval = 31000 + 500
             self.skipDuration = (31000 + 1000) * len(sectionList)
         skipThread = skipper(core=self.core, sectionList=sectionList)
         skipThread.start()
