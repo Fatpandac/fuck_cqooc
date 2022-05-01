@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from src.core import Core
 
 import threading
@@ -5,16 +6,16 @@ from time import sleep
 
 
 class skipper(threading.Thread):
-    '''用于执行跳过课程任务的线程类'''
+    """用于执行跳过课程任务的线程类"""
 
     def __init__(self, core: Core, sectionList: list) -> None:
-        '''参数说明：
+        """参数说明：
 
         *core* 功能内核对象，来自src.core
 
         *sectionList* 包含课程ID的字符串列表
 
-        '''
+        """
         threading.Thread.__init__(self)
         self.core = core
         self.sectionList = sectionList
@@ -41,4 +42,5 @@ class skipper(threading.Thread):
         self.state = True
 
     def getState(self) -> bool:
+        """返回True说明任务执行完成，False为未完成"""
         return self.state
