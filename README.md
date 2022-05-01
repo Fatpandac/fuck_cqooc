@@ -42,11 +42,6 @@
 这是因为重庆高校在线课程平台服务器的管控策略。短时间跳过太多任务，你可能会遭到网站临时屏蔽。屏蔽不会持续太久，不到一分钟就会解除。
 但为了保证所有任务都能成功跳过，程序设置跳过每个任务之间都会间隔一段时间，具体是30秒。
 
-- 跳过的过程中按钮没有反应?
-
-为了防止反复多次跳过任务，执行任务期间，程序会阻止按钮的点击，直到任务完成。
-如果程序进入无响应状态，跳过任务仍然在进行，请不要尝试关闭程序。
-
 ## Special Thanks
 
 <img src="https://resources.jetbrains.com/storage/products/company/brand/logos/jb_beam.png" alt="JetBrains Logo (Main) logo." width="168">
