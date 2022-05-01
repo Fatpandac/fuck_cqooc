@@ -16,6 +16,8 @@ from ttkbootstrap.constants import SUCCESS
 from ttkbootstrap.constants import OUTLINE
 from ttkbootstrap.constants import INFO
 from ttkbootstrap.constants import STRIPED
+from ttkbootstrap.constants import DISABLED
+from ttkbootstrap.constants import NORMAL
 from ttkbootstrap.dialogs import Messagebox
 from ttkbootstrap.dialogs import MessageDialog
 from ttkbootstrap.icons import Icon
@@ -293,8 +295,8 @@ class dashboardRoot(ttk.Window):
                 f"跳过完成。\n成功跳过{skipper.success}个任务，失败{skipper.fail}个。", "提示"
             )
             # 恢复按钮到可点击状态
-            self.buttonSelectAll["state"] = tkinter.NORMAL
-            self.buttonProceed["state"] = tkinter.NORMAL
+            self.buttonSelectAll["state"] = NORMAL
+            self.buttonProceed["state"] = NORMAL
             # 清空列表
             for i in self.treeLesson.get_children():
                 self.treeLesson.delete(i)
@@ -334,8 +336,8 @@ class dashboardRoot(ttk.Window):
         skipThread = skipper(core=self.core, sectionList=sectionList)
         skipThread.start()
         # 关闭按钮，防止任务执行过程中再次点击
-        self.buttonSelectAll["state"] = tkinter.DISABLED
-        self.buttonProceed["state"] = tkinter.DISABLED
+        self.buttonSelectAll["state"] = DISABLED
+        self.buttonProceed["state"] = DISABLED
         # 开启回调，检查任务执行情况
         self.after(self.skipInterval, self.proceedTaskAfter, skipThread)
         print(self.skipDuration)
