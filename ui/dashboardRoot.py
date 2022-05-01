@@ -15,6 +15,7 @@ from ttkbootstrap.constants import END
 from ttkbootstrap.constants import SUCCESS
 from ttkbootstrap.constants import OUTLINE
 from ttkbootstrap.constants import INFO
+from ttkbootstrap.constants import STRIPED
 from ttkbootstrap.dialogs import Messagebox
 from ttkbootstrap.dialogs import MessageDialog
 from ttkbootstrap.icons import Icon
@@ -107,6 +108,7 @@ class dashboardRoot(ttk.Window):
         self.courseFrame = ttk.Frame(self.contentWrapperFrame)
         self.lessonFrame = ttk.Frame(self.contentWrapperFrame)
         self.actionFrame = ttk.Frame(self.root)
+        self.progressFrame = ttk.Frame(self.root)
 
         # 放置所有框架
         self.welcomeFrame.pack()
@@ -114,6 +116,7 @@ class dashboardRoot(ttk.Window):
         self.courseFrame.pack(side=LEFT)
         self.lessonFrame.pack(side=LEFT)
         self.actionFrame.pack()
+        self.progressFrame.pack(fill=X, expand=YES, pady=(20,0))
 
         # 设置顶部状态提示语
         self.labelWelcome = ttk.Label(
@@ -179,6 +182,15 @@ class dashboardRoot(ttk.Window):
         self.buttonExit.pack(side=LEFT, pady=(20, 0))
         self.buttonSelectAll.pack(side=LEFT, padx=(400, 0), pady=(20, 0))
         self.buttonProceed.pack(side=LEFT, padx=(50, 0), pady=(20, 0))
+
+        # 设置进度条
+        self.progressBar = ttk.Progressbar(
+            master=self.progressFrame,
+            orient=tkinter.HORIZONTAL,
+            value=0,
+            bootstyle=(SUCCESS, STRIPED),
+        )
+        self.progressBar.pack(fill=X, padx=(30,30), expand=YES)
 
     def login(self) -> None:
         """登录"""
@@ -273,27 +285,59 @@ class dashboardRoot(ttk.Window):
             self.treeLesson.item(i, values=item)
         
     def proceedTaskAfter(self, skipper:skipper) -> None:
-        print("proceedAfter:",skipper.is_alive())
-        # 检查完成情况
-        if not skipper.is_alive():
+        # 利用标志位检查完成情况
+        if skipper.getState():
+            # 执行完成
+            self.progressBar["value"] = 100
             Messagebox.show_info(
                 f"跳过完成。\n成功跳过{skipper.success}个任务，失败{skipper.fail}个。", "提示"
             )
+            # 恢复按钮到可点击状态
+            self.buttonSelectAll['state'] = tkinter.NORMAL
+            self.buttonProceed['state'] = tkinter.NORMAL
             # 清空列表
             for i in self.treeLesson.get_children():
                 self.treeLesson.delete(i)
             self.displayLessonsById()
+        else:
+            # 未完成则需要继续回调
+            self.after(self.skipInterval, self.proceedTaskAfter, skipper)
+
+    def incrementProgressBar(self, args:list) -> None:
+        '''传递参数列表中，间隔时间为列表元素1，执行次数为元素2'''
+        countDown = args[1]
+        if not countDown == 0:
+            self.progressBar["value"] += 0.1
+            args[1] -= 1
+            self.progressBar.after(int(args[0]), self.incrementProgressBar, args)
 
     def proceedTask(self, e: tkinter.Event) -> None:
         sectionList = list()
+        argList = list()
         skipThread = None
-        skipDuration = 500
+        # 检查完成的间隔时间
+        self.skipInterval = 1000 + 500
+        # 预计任务全部完成需要的时间
+        self.skipDuration = 500
+        # 获取勾选的任务sectionID
         for i in self.treeLesson.get_children():
             item = self.treeLesson.item(i)["values"]
             if item[0] == "☑":
                 sectionList.append(str(item[3]))
+        # 默认检查间隔是1秒。如果任务数量大于1，就改为31秒
+        # 额外增加了500ms，防止出现检查的时候当前的单个任务差一点就完成的情况
         if len(sectionList) != 1:
-            skipDuration += (31000 * len(sectionList))
+            self.skipInterval = (31000 + 500)
+            self.skipDuration = (31000 + 1000) * len(sectionList)
         skipThread = skipper(core=self.core, sectionList=sectionList)
         skipThread.start()
-        self.after(skipDuration, self.proceedTaskAfter, skipThread)
+        # 关闭按钮，防止任务执行过程中再次点击
+        self.buttonSelectAll["state"] = tkinter.DISABLED
+        self.buttonProceed["state"] = tkinter.DISABLED
+        # 开启回调，检查任务执行情况
+        self.after(self.skipInterval, self.proceedTaskAfter, skipThread)
+        print(self.skipDuration)
+        argList = [int(self.skipDuration / 1000), 1000]
+        # 开始进度条之前需要先清空
+        self.progressBar["value"] = 0
+        self.progressBar.after(0, self.incrementProgressBar, argList)
