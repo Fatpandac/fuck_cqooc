@@ -20,7 +20,7 @@ class ApiUrl:
         )
 
     def get_nonce_api(self):
-        return f"http://www.cqooc.net/user/login?ts={self.__get_ts()}"
+        return f"http://www.cqooc.com/user/login?ts={self.__get_ts()}"
 
     def login_api(self, username: str, hash: str, nonce: str, cn: str) -> str:
         return (
