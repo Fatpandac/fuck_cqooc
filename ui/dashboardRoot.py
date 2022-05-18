@@ -1,8 +1,7 @@
 # -*- coding: utf-8 -*-
 from src.core import Core
 
-import sys
-import tkinter
+from sys import exit
 import ttkbootstrap as ttk
 from ttkbootstrap.constants import X
 from ttkbootstrap.constants import YES
@@ -167,7 +166,7 @@ class dashboardRoot(ttk.Window):
             master=self.actionFrame,
             text="退出",
             bootstyle=(INFO, OUTLINE),
-            command=sys.exit,
+            command=exit,
             width=10,
         )
         self.buttonSelectAll = ttk.Button(
@@ -188,7 +187,7 @@ class dashboardRoot(ttk.Window):
         # 设置进度条
         self.progressBar = ttk.Progressbar(
             master=self.progressFrame,
-            orient=tkinter.HORIZONTAL,
+            orient=ttk.HORIZONTAL,
             value=0,
             bootstyle=(SUCCESS, STRIPED),
         )
@@ -244,7 +243,7 @@ class dashboardRoot(ttk.Window):
         courseDict["course"] = courseList
         return courseDict
 
-    def displayLessonsByEvent(self, e: tkinter.Event) -> None:
+    def displayLessonsByEvent(self, e) -> None:
         selection = e.widget.item(e.widget.selection()[0])["values"]
         for i in self.courseList:
             if i[0] == selection[0]:
@@ -279,7 +278,7 @@ class dashboardRoot(ttk.Window):
         for i in taskList:
             self.treeLesson.insert("", END, values=i)
 
-    def processCheckbox(self, e: tkinter.Event) -> None:
+    def processCheckbox(self, e) -> None:
         selection = e.widget.item(e.widget.selection()[0])["values"]
         if selection[0] == "☐":
             selection[0] = "☑"
@@ -287,7 +286,7 @@ class dashboardRoot(ttk.Window):
             selection[0] = "☐"
         e.widget.item(e.widget.selection()[0], values=tuple(selection))
 
-    def selectAll(self, e: tkinter.Event) -> None:
+    def selectAll(self, e) -> None:
         for i in self.treeLesson.get_children():
             item = self.treeLesson.item(i)["values"]
             if item[0] == "☐":
@@ -321,7 +320,7 @@ class dashboardRoot(ttk.Window):
             # 每100ms检查一次
             self.after(1000, self.proceedTaskAfter, skipper)
 
-    def proceedTask(self, e: tkinter.Event) -> None:
+    def proceedTask(self, e) -> None:
         sectionList = list()
         skipThread = None
         # 获取勾选的任务sectionID
