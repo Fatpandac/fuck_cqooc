@@ -190,7 +190,12 @@ class dashboardRoot(ttk.Window):
             value=0,
             bootstyle=(SUCCESS, STRIPED),
         )
+        self.progressText = ttk.Label(
+            master=self.progressFrame,
+            text=""
+        )
         self.progressBar.pack(fill=X, padx=(30, 30), expand=YES)
+        self.progressText.pack()
 
     def login(self) -> None:
         """登录"""
@@ -300,8 +305,10 @@ class dashboardRoot(ttk.Window):
                 self.treeLesson.delete(i)
             self.displayLessonsById()
         else:
-            # 未完成则需要继续回调
-            self.after(self.skipInterval, self.proceedTaskAfter, skipper)
+            # 未完成
+            self.progressBar["value"] = 100 * (skipper.current / len(skipper.sectionList))
+            self.progressText.config(text=f"正在处理第{skipper.current}个，共{len(skipper.sectionList)}个。")
+            self.after(100, self.proceedTaskAfter, skipper)
 
     def incrementProgressBar(self, args: list) -> None:
         """传递参数列表中，间隔时间为列表元素1，执行次数为元素2"""
@@ -317,29 +324,17 @@ class dashboardRoot(ttk.Window):
         sectionList = list()
         argList = list()
         skipThread = None
-        # 检查完成的间隔时间
-        self.skipInterval = 1000 + 500
-        # 预计任务全部完成需要的时间
-        self.skipDuration = 500
         # 获取勾选的任务sectionID
         for i in self.treeLesson.get_children():
             item = self.treeLesson.item(i)["values"]
             if item[0] == "☑":
                 sectionList.append(str(item[3]))
-        # 默认检查间隔是1秒。如果任务数量大于1，就改为31秒
-        # 额外增加了500ms，防止出现检查的时候当前的单个任务差一点就完成的情况
-        if len(sectionList) != 1:
-            self.skipInterval = 31000 + 500
-            self.skipDuration = (31000 + 1000) * len(sectionList)
         skipThread = skipper(core=self.core, sectionList=sectionList)
         skipThread.start()
         # 关闭按钮，防止任务执行过程中再次点击
         self.buttonSelectAll["state"] = DISABLED
         self.buttonProceed["state"] = DISABLED
-        # 开启回调，检查任务执行情况
-        self.after(self.skipInterval, self.proceedTaskAfter, skipThread)
-        print(self.skipDuration)
-        argList = [int(self.skipDuration / 1000), 1000]
         # 开始进度条之前需要先清空
         self.progressBar["value"] = 0
-        self.progressBar.after(0, self.incrementProgressBar, argList)
+        # 开启回调，检查任务执行情况
+        self.after(100, self.proceedTaskAfter, skipThread)
