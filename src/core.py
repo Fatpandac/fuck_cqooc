@@ -20,19 +20,25 @@ class Core:
         id_res = self.__request.do_get(
             self.__api_url.id_api(self.__user.get_xsid())
         )
-        id_data = json.loads(id_res.text)
+        id_data = id_res.json()
         self.__user.set_id(id_data["id"])
 
         info_res = self.__request.do_get(self.__api_url.info_api())
-        info_data = json.loads(info_res.text)
+        info_data = info_res.json()
         self.__user.set_name(info_data["name"])
         self.__user.set_avatar(
             self.__request.get_host() + info_data["headimgurl"]
         )
 
     def login(self) -> dict:
-        nonce_res = self.__request.do_get(self.__api_url.get_nonce_api())
-        data = json.loads(nonce_res.text)
+        api = self.__api_url.get_nonce_api()
+        nonce_res = self.__request.do_get(
+            api,
+            {
+                "Referer": "http://www.cqooc.com/login",
+            },
+        )
+        data = nonce_res.json()
         cn = test.cnonce()
         hash = test.getEncodePwd(
             data["nonce"] + test.getEncodePwd(self.__user.get_pwd()) + cn
@@ -40,9 +46,12 @@ class Core:
         login_res = self.__request.do_post(
             self.__api_url.login_api(
                 self.__user.get_username(), hash, data["nonce"], cn
-            )
+            ),
+            headers={
+                "Referer": "http://www.cqooc.com/login",
+            },
         )
-        data = json.loads(login_res.text)
+        data = login_res.json()
         login_success = data["code"] == 0
         if login_success:
             self.__user.set_xsid(data["xsid"])
@@ -75,7 +84,7 @@ class Core:
                 "Host": "www.cqooc.com",
             },
         )
-        mcs_id_data = json.loads(mcs_id_res.text)
+        mcs_id_data = mcs_id_res.json()
         self.__user.set_mcs_id(mcs_id_data["data"][0]["id"])
         lessons_res = self.__request.do_get(
             self.__api_url.lessons_api(course_id),
@@ -124,7 +133,7 @@ class Core:
                 "Host": "www.cqooc.com",
             },
         )
-        status_code = json.loads(skip_res.text)["code"]
+        status_code = skip_res.json()["code"]
         if status_code == 2:
             return Msg().processing("已经跳过该课程", 200)
         elif status_code == 0:

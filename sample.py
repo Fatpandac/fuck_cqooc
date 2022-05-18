@@ -4,7 +4,7 @@ from src.core import Core
 import os
 import json
 
-username = os.environ.get("USERNAME")
+username = os.environ.get("USERS")
 password = os.environ.get("PASSWORD")
 
 

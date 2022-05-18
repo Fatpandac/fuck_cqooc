@@ -6,11 +6,13 @@ import os
 
 # ROOT_PATH = os.path.dirname(os.path.dirname(__file__))
 
-username = os.environ.get("USERNAME")
+username = os.environ.get("USERS")
 password = os.environ.get("PASSWORD")
 
 
 def test_login_success():
+    if (username is None) or (password is None):
+        print("!!! 请设置环境变量：USERS 和 PASSWORD !!!")
     core = Core(username, password)
     res = core.login()
     assert res["code"] == 200

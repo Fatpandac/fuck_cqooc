@@ -40,7 +40,7 @@ def test_info_api():
 def test_nonce_api():
     api_url = ApiUrl()
     assert api_url.get_nonce_api() == (
-        "http://www.cqooc.net/user/login" + f"?ts={get_ts()}"
+        "http://www.cqooc.com/user/login" + f"?ts={get_ts()}"
     )
 
 
