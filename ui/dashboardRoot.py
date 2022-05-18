@@ -20,6 +20,7 @@ from ttkbootstrap.constants import NORMAL
 from ttkbootstrap.dialogs import Messagebox
 from ttkbootstrap.dialogs import MessageDialog
 from ttkbootstrap.icons import Icon
+from ui.exceptionHandler import exceptionHandler
 
 from ui.skipper import skipper
 
@@ -35,6 +36,7 @@ class dashboardRoot(ttk.Window):
         self.title("fuck_cqooc")
         self.geometry("800x500")
         self.resizable(False, False)
+        ttk.Style().theme_use('darkly')
 
         # 定义控件
         self.root = ttk.Frame(self, padding=10)
@@ -206,7 +208,10 @@ class dashboardRoot(ttk.Window):
             return
 
         self.core = Core(username, password)
-        loginResult = self.core.login()
+        try:
+            loginResult = self.core.login()
+        except Exception as ex:
+            exceptionHandler(master=self,e=ex).start()
 
         self.buttonLogin["text"] = "登录"
         if loginResult["status"] == "ok":
@@ -294,9 +299,7 @@ class dashboardRoot(ttk.Window):
         if skipper.getState():
             # 执行完成
             self.progressBar["value"] = 100
-            Messagebox.show_info(
-                f"跳过完成。\n成功跳过{skipper.success}个任务，失败{skipper.fail}个。", "提示"
-            )
+            self.progressText.config(text="执行完成。")
             # 恢复按钮到可点击状态
             self.buttonSelectAll["state"] = NORMAL
             self.buttonProceed["state"] = NORMAL
@@ -304,25 +307,22 @@ class dashboardRoot(ttk.Window):
             for i in self.treeLesson.get_children():
                 self.treeLesson.delete(i)
             self.displayLessonsById()
+            Messagebox.show_info(
+                f"跳过完成。\n成功跳过{skipper.success}个任务，失败{skipper.fail}个。", "提示"
+            )
+            def clearStatus(self):
+                self.progressText.config(text="")
+                self.progressBar["value"] = 0
+            self.after(10000,clearStatus,self)
         else:
-            # 未完成
+            # 任务未完成
             self.progressBar["value"] = 100 * (skipper.current / len(skipper.sectionList))
             self.progressText.config(text=f"正在处理第{skipper.current}个，共{len(skipper.sectionList)}个。")
-            self.after(100, self.proceedTaskAfter, skipper)
-
-    def incrementProgressBar(self, args: list) -> None:
-        """传递参数列表中，间隔时间为列表元素1，执行次数为元素2"""
-        countDown = args[1]
-        if not countDown == 0:
-            self.progressBar["value"] += 0.1
-            args[1] -= 1
-            self.progressBar.after(
-                int(args[0]), self.incrementProgressBar, args
-            )
+            # 每100ms检查一次
+            self.after(1000, self.proceedTaskAfter, skipper)
 
     def proceedTask(self, e: tkinter.Event) -> None:
         sectionList = list()
-        argList = list()
         skipThread = None
         # 获取勾选的任务sectionID
         for i in self.treeLesson.get_children():
