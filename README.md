@@ -1,4 +1,4 @@
-# fuck_cqooc [![sync -> gitee](https://github.com/Fatpandac/fuck_cqooc/actions/workflows/sync-to-gitee.yml/badge.svg?branch=master&event=push)](https://github.com/Fatpandac/fuck_cqooc/actions/workflows/sync-to-gitee.yml)
+# fuck_cqooc
 
 <details>
 <summary>这是一个简单的 「cqooc」(http://www.cqooc.com) 刷课工具。</summary>
