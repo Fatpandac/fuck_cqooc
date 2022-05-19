@@ -35,7 +35,7 @@ class dashboardRoot(ttk.Window):
         self.title("fuck_cqooc")
         self.geometry("800x500")
         self.resizable(False, False)
-        ttk.Style().theme_use('darkly')
+        ttk.Style().theme_use("darkly")
 
         # 定义控件
         self.root = ttk.Frame(self, padding=10)
@@ -191,10 +191,7 @@ class dashboardRoot(ttk.Window):
             value=0,
             bootstyle=(SUCCESS, STRIPED),
         )
-        self.progressText = ttk.Label(
-            master=self.progressFrame,
-            text=""
-        )
+        self.progressText = ttk.Label(master=self.progressFrame, text="")
         self.progressBar.pack(fill=X, padx=(30, 30), expand=YES)
         self.progressText.pack()
 
@@ -210,7 +207,7 @@ class dashboardRoot(ttk.Window):
         try:
             loginResult = self.core.login()
         except Exception as ex:
-            exceptionHandler(master=self,e=ex).start()
+            exceptionHandler(master=self, e=ex).start()
 
         self.buttonLogin["text"] = "登录"
         if loginResult["status"] == "ok":
@@ -309,14 +306,20 @@ class dashboardRoot(ttk.Window):
             Messagebox.show_info(
                 f"跳过完成。\n成功跳过{skipper.success}个任务，失败{skipper.fail}个。", "提示"
             )
+
             def clearStatus(self):
                 self.progressText.config(text="")
                 self.progressBar["value"] = 0
-            self.after(10000,clearStatus,self)
+
+            self.after(10000, clearStatus, self)
         else:
             # 任务未完成
-            self.progressBar["value"] = 100 * (skipper.current / len(skipper.sectionList))
-            self.progressText.config(text=f"正在处理第{skipper.current}个，共{len(skipper.sectionList)}个。")
+            self.progressBar["value"] = 100 * (
+                skipper.current / len(skipper.sectionList)
+            )
+            self.progressText.config(
+                text=f"正在处理第{skipper.current}个，共{len(skipper.sectionList)}个。"
+            )
             # 每100ms检查一次
             self.after(1000, self.proceedTaskAfter, skipper)
 
