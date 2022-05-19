@@ -23,7 +23,8 @@ class exceptionHandler(ttk.Toplevel):
             master=self,
             anchor=ttk.W,
             font=font,
-            text="麻烦你把下列错误信息发送到 github.com/Fatpandac/fuck_cqooc/issues。我们很快就会修复的！",
+            text="麻烦你把下列错误信息发送到 github.com/Fatpandac/fuck_cqooc/issues。"
+            + "我们很快就会修复的！",
         )
         self.label1.pack(fill=ttk.BOTH, padx=10, pady=(10, 0))
         self.label2.pack(fill=ttk.BOTH, padx=10, pady=(0, 10))
@@ -31,7 +32,8 @@ class exceptionHandler(ttk.Toplevel):
         self.stacktraceText = ttk.Text(master=self, wrap=ttk.WORD)
         self.stacktraceText.insert(
             ttk.END,
-            "请将本段信息发送到github.com/Fatpandac/fuck_cqooc/issues，使用快捷键Ctrl+A和Ctrl+C复制。\n",
+            "请将本段信息发送到github.com/Fatpandac/fuck_cqooc/issues，"
+            + "使用快捷键Ctrl+A和Ctrl+C复制。\n",
         )
         self.stacktraceText.insert(
             ttk.END, "===============================================\n"
