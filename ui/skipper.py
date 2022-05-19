@@ -21,6 +21,7 @@ class skipper(threading.Thread):
         self.sectionList = sectionList
         self.success = 0
         self.fail = 0
+        self.current = 1
         self.state = False
 
     def run(self) -> None:
@@ -38,6 +39,7 @@ class skipper(threading.Thread):
             # 对于任务列表长度为1的情况就没有必要sleep这么久了，只有长度超过1的才要分别sleep 31秒
             if len(sectionList) != 1:
                 sleep(31)
+            self.current += 1
         # 跳出循环说明任务执行完成，修改状态标志位为True
         self.state = True
 
