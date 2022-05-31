@@ -37,7 +37,6 @@ def test_get_info():
     assert res["xsid"] is None
     assert res["id"] is None
     assert res["name"] is None
-    assert res["avatar"] is None
 
 
 def test_get_course():
