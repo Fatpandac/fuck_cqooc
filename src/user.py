@@ -6,7 +6,6 @@ class User:
     __username = None
     __pwd = None
     __name = None
-    __avatar = None
     __course_data = None
     __lessons_data = None
     __mcs_id = None
@@ -45,12 +44,6 @@ class User:
     def get_name(self) -> str:
         return self.__name
 
-    def set_avatar(self, avatar: str) -> None:
-        self.__avatar = avatar
-
-    def get_avatar(self) -> str:
-        return self.__avatar
-
     def set_course_data(self, course_data: dict) -> None:
         self.__course_data = course_data
 
@@ -76,7 +69,6 @@ class User:
             "username": self.__username,
             "pwd": self.__pwd,
             "name": self.__name,
-            "avatar": self.__avatar,
             "mcs_id": self.__mcs_id,
             "course_data": self.__course_data,
             "lessons_data": self.__lessons_data,
