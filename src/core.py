@@ -26,9 +26,6 @@ class Core:
         info_res = self.__request.do_get(self.__api_url.info_api())
         info_data = info_res.json()
         self.__user.set_name(info_data["name"])
-        self.__user.set_avatar(
-            self.__request.get_host() + info_data["headimgurl"]
-        )
 
     def login(self) -> dict:
         api = self.__api_url.get_nonce_api()

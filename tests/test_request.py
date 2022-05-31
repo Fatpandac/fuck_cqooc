@@ -57,19 +57,3 @@ def test_do_get():
         },
     )
     assert res.status_code == 200
-
-
-def test_do_post():
-    request = Request()
-    res = request.do_post(
-        "https://sm.ms/api/v2",
-        headers={
-            "User-Agent": ua,
-        },
-        proxies={
-            "http": "http://127.0.0.1:8889",
-            "https": "http://127.0.0.1:8889",
-        },
-    )
-    print(res.request.headers)
-    assert res.status_code == 200

@@ -23,7 +23,7 @@ def print_green_sentence(sentence):
 def main():
     # Step 1, init object
     print_red_sentence("\nStep 1, init object")
-    print_green_sentence("core = Core(username, password)")
+    print_green_sentence(f"core = Core({username}, {password})")
     core = Core(username, password)
 
     # Stpe 2
