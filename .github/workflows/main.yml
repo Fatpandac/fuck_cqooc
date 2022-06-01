@@ -34,7 +34,7 @@ jobs:
       - name: install pyinstaller
         run: |
           pip3 install pyinstaller # 可替换为自己项目的编译命令
-      - name: build app 
+      - name: build app
         run: |
           pyinstaller -F -w fuck_cqooc.pyw
       - name: build package
@@ -47,7 +47,7 @@ jobs:
           upload_url: ${{ needs.release.outputs.upload_url }}
           asset_path: fuckcqooc_win.tar.gz # 发布的压缩包名称
           asset_name: fuckcqooc_win.tar.gz # 发布的压缩包名称
-          asset_content_type: application/gzip          
+          asset_content_type: application/gzip
   macosbuild:
     name: build macos
     needs: release
@@ -61,7 +61,7 @@ jobs:
       - name: install pyinstaller
         run: |
           pip3 install pyinstaller # 可替换为自己项目的编译命令
-      - name: build app 
+      - name: build app
         run: |
           pyinstaller -F -w fuck_cqooc.pyw
       - name: build package
