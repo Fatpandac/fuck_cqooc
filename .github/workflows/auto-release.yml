@@ -50,7 +50,7 @@ jobs:
         with:
           upload_url: ${{ needs.release.outputs.upload_url }}
           asset_path: dist/fuckcqooc_win.tar.gz # 发布的压缩包名称
-          asset_name: fuckcqooc_win.tar.gz # 发布的压缩包名称
+          asset_name: fuckcqooc_${{ github.ref }}_win.tar.gz # 发布的压缩包名称
           asset_content_type: application/gzip
   macosbuild:
     name: build macos
@@ -81,5 +81,5 @@ jobs:
         with:
           upload_url: ${{ needs.release.outputs.upload_url }}
           asset_path: dist/fuckcqooc_macos.tar.gz # 发布的压缩包名称
-          asset_name: fuckcqooc_macos_x86_64.tar.gz # 发布的压缩包名称
+          asset_name: fuckcqooc_${{ github.ref }}_macos_x86_64.tar.gz # 发布的压缩包名称
           asset_content_type: application/gzip
