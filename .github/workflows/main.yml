@@ -1,0 +1,77 @@
+name: Release fuckcqooc
+on:
+  push:
+    tags:
+      - 0.*
+  workflow_dispatch:
+
+jobs:
+  release:
+    runs-on: windows-latest
+    outputs:
+      upload_url: ${{ steps.create_release.outputs.upload_url }}
+    steps:
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GAYHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: ${{ github.ref }}
+          draft: true # Release草稿
+          prerelease: true # 预览版
+  windowsbuild:
+    name: build windows
+    needs: release
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@master
+      - name: Set up Python 3.7
+        uses: actions/setup-python@v1
+        with:
+          python-version: 3.7
+      - name: install pyinstaller
+        run: |
+          pip3 install pyinstaller # 可替换为自己项目的编译命令
+      - name: build app 
+        run: |
+          pyinstaller -F -w fuck_cqooc.pyw
+      - name: build package
+        run: tar -zcvf fuckcqooc_win.tar.gz dist/fuck_cqooc.exe
+      - name: upload
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GAYHUB_TOKEN }}
+        with:
+          upload_url: ${{ needs.release.outputs.upload_url }}
+          asset_path: fuckcqooc_win.tar.gz # 发布的压缩包名称
+          asset_name: fuckcqooc_win.tar.gz # 发布的压缩包名称
+          asset_content_type: application/gzip          
+  macosbuild:
+    name: build macos
+    needs: release
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@master
+      - name: Set up Python 3.7
+        uses: actions/setup-python@v1
+        with:
+          python-version: 3.7
+      - name: install pyinstaller
+        run: |
+          pip3 install pyinstaller # 可替换为自己项目的编译命令
+      - name: build app 
+        run: |
+          pyinstaller -F -w fuck_cqooc.pyw
+      - name: build package
+        run: tar -zcvf fuckcqooc_mac.tar.gz dist/fuck_cqooc.app
+      - name: upload
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GAYHUB_TOKEN }}
+        with:
+          upload_url: ${{ needs.release.outputs.upload_url }}
+          asset_path: fuckcqooc_mac.tar.gz # 发布的压缩包名称
+          asset_name: fuckcqooc_mac.tar.gz # 发布的压缩包名称
+          asset_content_type: application/gzip
