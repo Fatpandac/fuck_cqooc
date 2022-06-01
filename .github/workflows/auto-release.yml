@@ -18,7 +18,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GAYHUB_TOKEN }}
         with:
           tag_name: ${{ github.ref }}
-          release_name: ${{ github.ref }}
+          release_name: 🎉 ${{ github.ref }}
           draft: true # Release草稿
           prerelease: true # 预览版
   windowsbuild:
@@ -34,19 +34,23 @@ jobs:
       - name: install pyinstaller
         run: |
           pip3 install pyinstaller # 可替换为自己项目的编译命令
+      - name: setup env
+        run: |
+          pip3 install -r requirements.txt
       - name: build app
         run: |
           pyinstaller -F -w fuck_cqooc.pyw
       - name: build package
-        run: tar -zcvf fuckcqooc_win.tar.gz dist/fuck_cqooc.exe
+        run: |
+          cd dist && tar -zcvf fuckcqooc_win.tar.gz fuck_cqooc.exe
       - name: upload
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GAYHUB_TOKEN }}
         with:
           upload_url: ${{ needs.release.outputs.upload_url }}
-          asset_path: fuckcqooc_win.tar.gz # 发布的压缩包名称
-          asset_name: fuckcqooc_win.tar.gz # 发布的压缩包名称
+          asset_path: dist/fuckcqooc_win.tar.gz # 发布的压缩包名称
+          asset_name: fuckcqooc_${{ github.ref }}_win.tar.gz # 发布的压缩包名称
           asset_content_type: application/gzip
   macosbuild:
     name: build macos
@@ -61,17 +65,21 @@ jobs:
       - name: install pyinstaller
         run: |
           pip3 install pyinstaller # 可替换为自己项目的编译命令
+      - name: setup env
+        run: |
+          pip3 install -r requirements.txt
       - name: build app
         run: |
           pyinstaller -F -w fuck_cqooc.pyw
       - name: build package
-        run: tar -zcvf fuckcqooc_mac.tar.gz dist/fuck_cqooc.app
+        run: |
+          cd dist && tar -zcvf fuckcqooc_macos.tar.gz fuck_cqooc.app
       - name: upload
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GAYHUB_TOKEN }}
         with:
           upload_url: ${{ needs.release.outputs.upload_url }}
-          asset_path: fuckcqooc_mac.tar.gz # 发布的压缩包名称
-          asset_name: fuckcqooc_mac.tar.gz # 发布的压缩包名称
+          asset_path: dist/fuckcqooc_macos.tar.gz # 发布的压缩包名称
+          asset_name: fuckcqooc_${{ github.ref }}_macos_x86_64.tar.gz # 发布的压缩包名称
           asset_content_type: application/gzip
