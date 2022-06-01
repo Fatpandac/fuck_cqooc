@@ -49,7 +49,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GAYHUB_TOKEN }}
         with:
           upload_url: ${{ needs.release.outputs.upload_url }}
-          asset_path: fuckcqooc_win.tar.gz # 发布的压缩包名称
+          asset_path: dist/fuckcqooc_win.tar.gz # 发布的压缩包名称
           asset_name: fuckcqooc_win.tar.gz # 发布的压缩包名称
           asset_content_type: application/gzip
   macosbuild:
@@ -73,13 +73,13 @@ jobs:
           pyinstaller -F -w fuck_cqooc.pyw
       - name: build package
         run: |
-          cd dist && tar -zcvf fuckcqooc_mac.tar.gz fuck_cqooc.app
+          cd dist && tar -zcvf fuckcqooc_macos.tar.gz fuck_cqooc.app
       - name: upload
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GAYHUB_TOKEN }}
         with:
           upload_url: ${{ needs.release.outputs.upload_url }}
-          asset_path: dist/fuckcqooc_mac.tar.gz # 发布的压缩包名称
-          asset_name: fuckcqooc_mac.tar.gz # 发布的压缩包名称
+          asset_path: dist/fuckcqooc_macos.tar.gz # 发布的压缩包名称
+          asset_name: fuckcqooc_macos_x86_64.tar.gz # 发布的压缩包名称
           asset_content_type: application/gzip
