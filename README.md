@@ -1,6 +1,7 @@
 <h1 align="center">fuck_cqooc</h1>
 
-![GitHub](https://img.shields.io/github/license/Fatpandac/fuck_cqooc)  ![GitHub all releases](https://img.shields.io/github/downloads/Fatpandac/fuck_cqooc/total)  ![GitHub release (latest by date including pre-releases)](https://img.shields.io/github/v/release/Fatpandac/fuck_cqooc?include_prereleases)  [![pre-commit.ci status](https://results.pre-commit.ci/badge/github/Fatpandac/fuck_cqooc/master.svg)](https://results.pre-commit.ci/latest/github/Fatpandac/fuck_cqooc/master)
+![GitHub](https://img.shields.io/github/license/Fatpandac/fuck_cqooc) [![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2FFatpandac%2Ffuck_cqooc.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2FFatpandac%2Ffuck_cqooc?ref=badge_shield)
+ ![GitHub all releases](https://img.shields.io/github/downloads/Fatpandac/fuck_cqooc/total)  ![GitHub release (latest by date including pre-releases)](https://img.shields.io/github/v/release/Fatpandac/fuck_cqooc?include_prereleases)  [![pre-commit.ci status](https://results.pre-commit.ci/badge/github/Fatpandac/fuck_cqooc/master.svg)](https://results.pre-commit.ci/latest/github/Fatpandac/fuck_cqooc/master)
 
 <details>
 <summary>这是一个简单的 「cqooc」(http://www.cqooc.com) 刷课工具。</summary>
@@ -48,3 +49,7 @@
 ## Special Thanks
 
 <img src="https://resources.jetbrains.com/storage/products/company/brand/logos/jb_beam.png" alt="JetBrains Logo (Main) logo." width="168">
+
+
+## License
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2FFatpandac%2Ffuck_cqooc.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2FFatpandac%2Ffuck_cqooc?ref=badge_large)
