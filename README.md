@@ -14,11 +14,6 @@
 > 🎙️ Teacher, leave those kids alone
 </details>
 
-## [Core 的使用样例](./sample.py)
-
-在终端环境中分别设置变量 `USERS` 和 `PASSWORD`
-后运行 `python3 sample.py` 它将会告诉你 Core 的运行方式。
-
 ## 使用方法
 
 1. 安装
