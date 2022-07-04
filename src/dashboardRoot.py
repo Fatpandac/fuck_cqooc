@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from src.core import Core
+from hackcqooc.core import Core
 
 from sys import exit
 import ttkbootstrap as ttk
@@ -19,9 +19,9 @@ from ttkbootstrap.constants import NORMAL
 from ttkbootstrap.dialogs import Messagebox
 from ttkbootstrap.dialogs import MessageDialog
 from ttkbootstrap.icons import Icon
-from ui.exceptionHandler import exceptionHandler
+from src.exceptionHandler import exceptionHandler
 
-from ui.skipper import skipper
+from src.skipper import skipper
 
 
 class dashboardRoot(ttk.Window):

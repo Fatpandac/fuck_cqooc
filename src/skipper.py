@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from src.core import Core
+from hackcqooc.core import Core
 
 import threading
 from time import sleep

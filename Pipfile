@@ -5,6 +5,7 @@ name = "pypi"
 
 [packages]
 ttkbootstrap = "*"
+hackcqooc = "*"
 
 [dev-packages]
 pre-commit = "*"
