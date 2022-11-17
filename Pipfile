@@ -4,8 +4,8 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-ttkbootstrap = "*"
 hackcqooc = "*"
+flet = "*"
 
 [dev-packages]
 pre-commit = "*"
