@@ -11,9 +11,17 @@ def skip_view(page: ft.Page):
         expand=True,
     )
 
+    def disabled_course_list_button(index: int):
+        """设置禁用按钮"""
+        for buttonIndex, textButton in enumerate(courseList.controls.copy()):
+            textButton.disabled = True if index == buttonIndex else False
+        page.update()
+
     def choose_course(e):
+        index, course_id = e.control.dat
+        disabled_course_list_button(index)
         # 获取课程任务列表
-        task_list = page.core.get_course_lessons(e.control.data).get("data")
+        task_list = page.core.get_course_lessons(course_id).get("data")
         taskList.controls.clear()
         for task in task_list:
             taskList.controls.append(
@@ -31,24 +39,20 @@ def skip_view(page: ft.Page):
     course_dict = page.core.get_course()
     if course_dict.get("code") == 200:
         page.course_list = course_dict.get("data")
-        for course_item in page.course_list:
+        for index, course_item in enumerate(page.course_list):
             courseList.controls.append(
-                ft.Column(
-                    [
-                        ft.TextButton(
-                            text=course_item.get("title"),
-                            style=ft.ButtonStyle(
-                                shape={
-                                    "hovered": ft.RoundedRectangleBorder(),
-                                    "": ft.RoundedRectangleBorder(),
-                                }
-                            ),
-                            width=200,
-                            data=course_item.get("courseId"),
-                            on_click=choose_course,
-                        ),
-                    ]
-                )
+                ft.TextButton(
+                    text=course_item.get("title"),
+                    style=ft.ButtonStyle(
+                        shape={
+                            "hovered": ft.RoundedRectangleBorder(),
+                            "": ft.RoundedRectangleBorder(),
+                        }
+                    ),
+                    data=(index, course_item.get("courseId")),
+                    on_click=choose_course,
+                    disabled=False,
+                ),
             )
     else:
         # TODO: 提示课程获取异常
@@ -58,7 +62,8 @@ def skip_view(page: ft.Page):
         chooseResults = filter(
             lambda x: x is not None,
             map(
-                lambda x: x.data if x.value else None, taskList.controls.copy()
+                lambda x: x.data if x.value and not x.disabled else None,
+                taskList.controls.copy(),
             ),
         )
         print(list(chooseResults))
