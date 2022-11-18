@@ -1,10 +1,14 @@
+# -*- coding: utf-8 -*-
+from components import show_snack_bar
+
 import flet as ft
 from hackcqooc.core import Core
 
 
 def login_view(page: ft.page):
-    account = ft.TextField(label="帐号", hint_text="请输入帐号",
-                           max_lines=1, width=400)
+    account = ft.TextField(
+        label="帐号", hint_text="请输入帐号", max_lines=1, width=400
+    )
     password = ft.TextField(
         label="密码",
         hint_text="请输入密码",
@@ -15,19 +19,10 @@ def login_view(page: ft.page):
     )
 
     def login(_e):
-        def login_show_snack_bar(text):
-            return page.show_snack_bar(
-                ft.SnackBar(
-                    open=True,
-                    content=ft.Text(text),
-                    bgcolor=ft.colors.ERROR,
-                )
-            )
-
         if not account.value:
-            login_show_snack_bar("请输入帐号")
+            show_snack_bar(page, "请输入帐号", ft.colors.ERROR)
         elif not password.value:
-            login_show_snack_bar("请输入密码")
+            show_snack_bar(page, "请输入密码", ft.colors.ERROR)
         else:
             page.core = Core(account.value, password.value)
             login_res = page.core.login()
@@ -35,7 +30,7 @@ def login_view(page: ft.page):
                 print(f"帐号: {account.value}, 密码: {password.value}")
                 page.go("/course")
             else:
-                login_show_snack_bar(login_res["msg"])
+                show_snack_bar(page, login_res["msg"], ft.colors.ERROR)
 
     # View
     page.views.append(

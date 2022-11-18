@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+from components import show_snack_bar
+
 import flet as ft
 
 
@@ -18,7 +20,7 @@ def skip_view(page: ft.Page):
         page.update()
 
     def choose_course(e):
-        index, course_id = e.control.dat
+        index, course_id = e.control.data
         disabled_course_list_button(index)
         # 获取课程任务列表
         task_list = page.core.get_course_lessons(course_id).get("data")
@@ -59,14 +61,21 @@ def skip_view(page: ft.Page):
         pass
 
     def skip(e):
-        chooseResults = filter(
-            lambda x: x is not None,
-            map(
-                lambda x: x.data if x.value and not x.disabled else None,
-                taskList.controls.copy(),
-            ),
+        chooseResults = list(
+            filter(
+                lambda x: x is not None,
+                map(
+                    lambda x: x.data if x.value and not x.disabled else None,
+                    taskList.controls.copy(),
+                ),
+            )
         )
-        print(list(chooseResults))
+        if len(chooseResults) == 0:
+            show_snack_bar(page, "你还没有选择课程哟〜", ft.colors.ERROR)
+        else:
+            # TODO: 进行刷课
+            pass
+        print(chooseResults)
 
     def reverse_selection(e):
         chooseAll = taskList.controls.copy()
