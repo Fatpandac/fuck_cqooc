@@ -3,6 +3,7 @@ import flet as ft
 
 
 def skip_view(page: ft.Page):
+    # TODO: 添加列表搜索框
     courseList = ft.ListView(
         width=200,
     )
@@ -11,36 +12,47 @@ def skip_view(page: ft.Page):
     )
 
     def choose_course(e):
+        # 获取课程任务列表
+        task_list = page.core.get_course_lessons(e.control.data).get("data")
         taskList.controls.clear()
-        for i in range(e.control.data):
+        for task in task_list:
             taskList.controls.append(
                 ft.Checkbox(
-                    label=f"Unchecked by default checkbox {i}",
-                    value=False,
-                    data=i,
+                    label="没有描述"
+                    if task.get("title") is None
+                    else task.get("title"),
+                    value=False if task.get("status") == 0 else True,
+                    disabled=False if task.get("status") == 0 else True,
+                    data=task.get("sectionId"),
                 )
             )
         page.update()
 
-    for i in range(20):
-        courseList.controls.append(
-            ft.Column(
-                [
-                    ft.TextButton(
-                        text="README.md",
-                        style=ft.ButtonStyle(
-                            shape={
-                                "hovered": ft.RoundedRectangleBorder(),
-                                "": ft.RoundedRectangleBorder(),
-                            }
+    course_dict = page.core.get_course()
+    if course_dict.get("code") == 200:
+        page.course_list = course_dict.get("data")
+        for course_item in page.course_list:
+            courseList.controls.append(
+                ft.Column(
+                    [
+                        ft.TextButton(
+                            text=course_item.get("title"),
+                            style=ft.ButtonStyle(
+                                shape={
+                                    "hovered": ft.RoundedRectangleBorder(),
+                                    "": ft.RoundedRectangleBorder(),
+                                }
+                            ),
+                            width=200,
+                            data=course_item.get("courseId"),
+                            on_click=choose_course,
                         ),
-                        width=200,
-                        data=i,
-                        on_click=choose_course,
-                    ),
-                ]
+                    ]
+                )
             )
-        )
+    else:
+        # TODO: 提示课程获取异常
+        pass
 
     def skip(e):
         chooseResults = filter(
@@ -51,10 +63,10 @@ def skip_view(page: ft.Page):
         )
         print(list(chooseResults))
 
-    def choose_all(e):
+    def reverse_selection(e):
         chooseAll = taskList.controls.copy()
         for i in chooseAll:
-            i.value = not i.value
+            i.value = not i.value if i.disabled is False else i.value
         page.update()
 
     page.views.append(
@@ -69,7 +81,7 @@ def skip_view(page: ft.Page):
                                 ft.FilledButton(
                                     "全选",
                                     icon=ft.icons.ALL_INBOX,
-                                    on_click=choose_all,
+                                    on_click=reverse_selection,
                                 ),
                                 ft.FilledButton(
                                     "Fuck",
