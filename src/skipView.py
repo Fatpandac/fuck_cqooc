@@ -12,7 +12,7 @@ def skip_view(page: ft.Page):
     taskList = ft.ListView(
         expand=True,
     )
-    topTitle = ft.Text("选择需要刷课的课程", size=30)
+    topTitle = ft.Text("请选择需要刷课的课程", size=30)
 
     def disabled_course_list_button(index: int):
         """设置禁用按钮"""
@@ -21,15 +21,18 @@ def skip_view(page: ft.Page):
         page.update()
 
     def update_top_title(title: str):
+        """更新当前页面标题"""
         topTitle.value = title
         page.update()
 
     def choose_course(e):
         index, course_id, title = e.control.data
-        disabled_course_list_button(index)
-        update_top_title(title)
         # 获取课程任务列表
         task_list = page.core.get_course_lessons(course_id).get("data")
+
+        disabled_course_list_button(index)
+        update_top_title(title)
+
         taskList.controls.clear()
         for task in task_list:
             title = "没有描述" if task.get("title") is None else task.get("title")
@@ -93,10 +96,17 @@ def skip_view(page: ft.Page):
         print(chooseResults)
 
     def reverse_selection(e):
-        chooseAll = taskList.controls.copy()
-        for i in chooseAll:
-            i.value = not i.value if i.disabled is False else i.value
-        page.update()
+        task_list_controls = taskList.controls.copy()
+        have_unfinish_task = any(
+            map(lambda task: not task.disabled, task_list_controls)
+        )
+
+        if have_unfinish_task:
+            for i in task_list_controls:
+                i.value = not i.value if i.disabled is False else i.value
+            page.update()
+        else:
+            show_snack_bar(page, "全部课程都已经刷完了 ^_^", ft.colors.GREEN)
 
     page.views.append(
         ft.View(
@@ -108,12 +118,12 @@ def skip_view(page: ft.Page):
                             topTitle,
                             ft.Row(
                                 [
-                                    ft.FilledButton(
+                                    ft.ElevatedButton(
                                         "全选",
                                         icon=ft.icons.ALL_INBOX,
                                         on_click=reverse_selection,
                                     ),
-                                    ft.FilledButton(
+                                    ft.ElevatedButton(
                                         "Fuck",
                                         icon=ft.icons.DONE,
                                         on_click=skip,
