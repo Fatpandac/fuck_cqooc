@@ -104,6 +104,8 @@ def skip_view(page: ft.Page):
         no_data_alert.open = True
         page.update()
 
+    page.isOnSkipping = False
+
     def skip(e):
         chooseResults = list(
             filter(
@@ -114,40 +116,55 @@ def skip_view(page: ft.Page):
                 ),
             )
         )
+
+        print(page.isOnSkipping)
+
         if len(chooseResults) == 0:
             show_snack_bar(page, "你还没有选择课程哟〜", ft.colors.ERROR)
+        elif page.isOnSkipping:
+            show_snack_bar(page, "有刷课任务正在进行，请结束后再试〜", ft.colors.ERROR)
         else:
 
             def close_alert(e):
                 """关闭对话框，恢复标题文字，并更新任务列表"""
+                page.isOnSkipping = False
                 success_dialog.open = False
+                taskIndicator.visible = False
                 taskIndicator.value = 0
                 topTitle.value = page.current_course[2]
                 choose_course()
                 page.update()
 
-            taskIndicator.visible = not taskIndicator.visible
+            def start_skip_task():
+                """执行刷课任务"""
+                while skipper.getState() is not True:
+                    taskIndicator.value = taskIndicator.value + (1 / 1000)
+                    topTitle.value = f"🕓 正在刷课中，当前第{skipper.current}个，"
+                    +f"共{len(chooseResults)}个。"
+                    page.update()
+                    sleep(duration / 1000)
+
+            def wait_indicator_finish():
+                """处理任务完成但进度条没满的情况"""
+                while taskIndicator.value < 1:
+                    taskIndicator.value = taskIndicator.value + (1 / 1000)
+                    page.update()
+                    sleep(duration / 1000)
+
+            taskIndicator.visible = True
             skipper = skp(page.core, chooseResults)
             skipper.start()
+            page.isOnSkipping = True
             duration = 31 * len(chooseResults) if len(chooseResults) > 1 else 1
-            # 执行刷课任务
-            while skipper.getState() is not True:
-                taskIndicator.value = taskIndicator.value + (1 / 1000)
-                topTitle.value = (
-                    f"🕓 正在刷课中，当前第{skipper.current}个，共{len(chooseResults)}个。"
-                )
-                page.update()
-                sleep(duration / 1000)
-            # 处理任务完成但进度条没满的情况
-            while taskIndicator.value < 1:
-                taskIndicator.value = taskIndicator.value + (1 / 1000)
-                page.update()
-                sleep(duration / 1000)
+
+            start_skip_task()
+            wait_indicator_finish()
+
             success_dialog = ft.AlertDialog(
                 modal=True,
                 title=ft.Text("任务完成"),
                 content=ft.Text(
-                    f"任务完成。执行了{len(chooseResults)}个任务，"
+                    f"任务结束。执行了{len(chooseResults)}个任务，"
                     + f"成功{skipper.success}个，失败{skipper.fail}个。"
                 ),
                 actions=[
@@ -171,7 +188,7 @@ def skip_view(page: ft.Page):
                 i.value = not i.value if i.disabled is False else i.value
             page.update()
         else:
-            show_snack_bar(page, "全部课程都已经刷完了 ^_^", ft.colors.GREEN)
+            show_snack_bar(page, "该课全部课程都已经刷完了 ^_^", ft.colors.GREEN)
 
     page.views.append(
         ft.View(
