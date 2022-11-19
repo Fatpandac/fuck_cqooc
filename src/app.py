@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from loginView import login_view
 from skipView import skip_view
 
@@ -24,6 +25,7 @@ def main(page: ft.Page):
     page.on_route_change = on_route_change
     page.on_view_pop = view_pop
     page.window_min_width = 800
+    page.window_width = 800
     page.window_height = 600
     page.window_min_height = 600
     page.go(page.route)
