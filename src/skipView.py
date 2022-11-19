@@ -3,6 +3,9 @@ from components import show_snack_bar
 
 import flet as ft
 
+from skipper import skipper as skp
+from time import sleep
+
 
 def skip_view(page: ft.Page):
     # TODO: 添加列表搜索框
@@ -12,10 +15,11 @@ def skip_view(page: ft.Page):
     taskList = ft.ListView(
         expand=True,
     )
+    taskIndicator = ft.ProgressBar(value=0, visible=False)
     topTitle = ft.Text("请选择需要刷课的课程", size=30)
 
     def disabled_course_list_button(index: int):
-        """设置禁用按钮"""
+        """设置禁用课程按钮"""
         for buttonIndex, textButton in enumerate(courseList.controls.copy()):
             textButton.disabled = True if index == buttonIndex else False
         page.update()
@@ -25,8 +29,14 @@ def skip_view(page: ft.Page):
         topTitle.value = title
         page.update()
 
-    def choose_course(e):
-        index, course_id, title = e.control.data
+    def choose_course(e=None):
+        if e is not None:
+            # 调用来自点击事件，当前课程信息更新为新课程
+            index, course_id, title = e.control.data
+            page.current_course = [index, course_id, title]
+        else:
+            # 主动调用，使用之前保存的当前课程信息
+            index, course_id, title = page.current_course
         # 获取课程任务列表
         task_list = page.core.get_course_lessons(course_id).get("data")
 
@@ -75,8 +85,24 @@ def skip_view(page: ft.Page):
                 ),
             )
     else:
-        # TODO: 提示课程获取异常
-        pass
+
+        def close_alert():
+            """关闭对话框"""
+            no_data_alert.open = False
+            page.update()
+
+        no_data_alert = ft.AlertDialog(
+            modal=True,
+            title=ft.Text("提示"),
+            content=ft.Text(f"获取课程数据失败，错误代码是{course_dict.get('code')}。"),
+            actions=[
+                ft.TextButton("好", on_click=close_alert),
+            ],
+            actions_alignment="end",
+        )
+        page.dialog = no_data_alert
+        no_data_alert.open = True
+        page.update()
 
     def skip(e):
         chooseResults = list(
@@ -91,8 +117,47 @@ def skip_view(page: ft.Page):
         if len(chooseResults) == 0:
             show_snack_bar(page, "你还没有选择课程哟〜", ft.colors.ERROR)
         else:
-            # TODO: 进行刷课
-            pass
+
+            def close_alert(e):
+                """关闭对话框，恢复标题文字，并更新任务列表"""
+                success_dialog.open = False
+                taskIndicator.value = 0
+                topTitle.value = page.current_course[2]
+                choose_course()
+                page.update()
+
+            taskIndicator.visible = not taskIndicator.visible
+            skipper = skp(page.core, chooseResults)
+            skipper.start()
+            duration = 31 * len(chooseResults) if len(chooseResults) > 1 else 1
+            # 执行刷课任务
+            while skipper.getState() is not True:
+                taskIndicator.value = taskIndicator.value + (1 / 1000)
+                topTitle.value = (
+                    f"🕓 正在刷课中，当前第{skipper.current}个，共{len(chooseResults)}个。"
+                )
+                page.update()
+                sleep(duration / 1000)
+            # 处理任务完成但进度条没满的情况
+            while taskIndicator.value < 1:
+                taskIndicator.value = taskIndicator.value + (1 / 1000)
+                page.update()
+                sleep(duration / 1000)
+            success_dialog = ft.AlertDialog(
+                modal=True,
+                title=ft.Text("任务完成"),
+                content=ft.Text(
+                    f"任务完成。执行了{len(chooseResults)}个任务，"
+                    + f"成功{skipper.success}个，失败{skipper.fail}个。"
+                ),
+                actions=[
+                    ft.TextButton("好", on_click=close_alert),
+                ],
+                actions_alignment="end",
+            )
+            page.dialog = success_dialog
+            success_dialog.open = True
+            page.update()
         print(chooseResults)
 
     def reverse_selection(e):
@@ -112,6 +177,7 @@ def skip_view(page: ft.Page):
         ft.View(
             "/skip",
             [
+                taskIndicator,
                 ft.Container(
                     content=ft.Row(
                         [
