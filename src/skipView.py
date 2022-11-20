@@ -139,8 +139,10 @@ def skip_view(page: ft.Page):
                 """执行刷课任务"""
                 while skipper.getState() is not True:
                     taskIndicator.value = taskIndicator.value + (1 / 1000)
-                    topTitle.value = f"🕓 正在刷课中，当前第{skipper.current}个，"
-                    +f"共{len(chooseResults)}个。"
+                    topTitle.value = (
+                        f"🕓 正在刷课中，当前第{skipper.current}个，"
+                        + f"共{len(chooseResults)}个。"
+                    )
                     page.update()
                     sleep(duration / 1000)
 

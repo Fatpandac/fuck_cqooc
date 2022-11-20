@@ -58,11 +58,11 @@
         },
         "hackcqooc": {
             "hashes": [
-                "sha256:834a6af28f25fb262d22ddbcea88beb612dd0d624917675b50c51b147cbfffa3",
-                "sha256:ab6a4aeed78a97c1cd33ef1d1021fcd77d60493e2b8a8b887bbcb08b4b0c3e8f"
+                "sha256:369fa562dae4bda5d52953fd714b7976db06a0575fd1b7cc0875503fd8fa7798",
+                "sha256:d2067ca1ba22aa2d3c0e4f409ae358c93329a2f992f83d78853b2d4ece35c9e6"
             ],
             "index": "pypi",
-            "version": "==0.0.5"
+            "version": "==0.0.7"
         },
         "idna": {
             "hashes": [
@@ -215,11 +215,11 @@
         },
         "identify": {
             "hashes": [
-                "sha256:48b7925fe122720088aeb7a6c34f17b27e706b72c61070f27fe3789094233440",
-                "sha256:7a214a10313b9489a0d61467db2856ae8d0b8306fc923e03a9effa53d8aedc58"
+                "sha256:906036344ca769539610436e40a684e170c3648b552194980bb7b617a8daeb9f",
+                "sha256:a390fb696e164dbddb047a0db26e57972ae52fbd037ae68797e5ae2f4492485d"
             ],
             "markers": "python_version >= '3.7'",
-            "version": "==2.5.8"
+            "version": "==2.5.9"
         },
         "nodeenv": {
             "hashes": [
@@ -293,11 +293,11 @@
         },
         "setuptools": {
             "hashes": [
-                "sha256:d0b9a8433464d5800cbe05094acf5c6d52a91bfac9b52bcfc4d41382be5d5d31",
-                "sha256:e197a19aa8ec9722928f2206f8de752def0e4c9fc6953527360d1c36d94ddb2f"
+                "sha256:6211d2f5eddad8757bd0484923ca7c0a6302ebc4ab32ea5e94357176e0ca0840",
+                "sha256:d1eebf881c6114e51df1664bc2c9133d022f78d12d5f4f665b9191f084e2862d"
             ],
             "markers": "python_version >= '3.7'",
-            "version": "==65.5.1"
+            "version": "==65.6.0"
         },
         "toml": {
             "hashes": [

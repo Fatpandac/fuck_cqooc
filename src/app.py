@@ -3,9 +3,18 @@ from loginView import login_view
 from skipView import skip_view
 
 import flet as ft
+import logging
+
+logging.basicConfig(
+    filename="fuckcqooc.log",
+    filemode="w",
+    level=logging.INFO,
+)
 
 
 def main(page: ft.Page):
+    logging.info("Init main page")
+
     def on_route_change(e):
         page.views.clear()
         login_view(page)
