@@ -15,8 +15,8 @@ def skip_view(page: ft.Page):
     taskList = ft.ListView(
         expand=True,
     )
-    taskIndicator = ft.ProgressBar(value=0, visible=False)
-    topTitle = ft.Text("请选择需要刷课的课程", size=30)
+    taskIndicator = ft.Ref[ft.ProgressBar]()
+    topTitle = ft.Ref[ft.Text]()
 
     def disabled_course_list_button(index: int):
         """设置禁用课程按钮"""
@@ -26,7 +26,7 @@ def skip_view(page: ft.Page):
 
     def update_top_title(title: str):
         """更新当前页面标题"""
-        topTitle.value = title
+        topTitle.current.value = title
         page.update()
 
     def choose_course(e=None):
@@ -129,17 +129,19 @@ def skip_view(page: ft.Page):
                 """关闭对话框，恢复标题文字，并更新任务列表"""
                 page.isOnSkipping = False
                 success_dialog.open = False
-                taskIndicator.visible = False
-                taskIndicator.value = 0
-                topTitle.value = page.current_course[2]
+                taskIndicator.current.visible = False
+                taskIndicator.current.value = 0
+                topTitle.current.value = page.current_course[2]
                 choose_course()
                 page.update()
 
             def start_skip_task():
                 """执行刷课任务"""
                 while skipper.getState() is not True:
-                    taskIndicator.value = taskIndicator.value + (1 / 1000)
-                    topTitle.value = (
+                    taskIndicator.current.value = (
+                        taskIndicator.current.value + (1 / 1000)
+                    )
+                    topTitle.current.value = (
                         f"🕓 正在刷课中，当前第{skipper.current}个，"
                         + f"共{len(chooseResults)}个。"
                     )
@@ -148,12 +150,14 @@ def skip_view(page: ft.Page):
 
             def wait_indicator_finish():
                 """处理任务完成但进度条没满的情况"""
-                while taskIndicator.value < 1:
-                    taskIndicator.value = taskIndicator.value + (1 / 1000)
+                while taskIndicator.current.value < 1:
+                    taskIndicator.current.value = (
+                        taskIndicator.current.value + (1 / 1000)
+                    )
                     page.update()
                     sleep(duration / 1000)
 
-            taskIndicator.visible = True
+            taskIndicator.current.visible = True
             skipper = skp(page.core, chooseResults)
             skipper.start()
             page.isOnSkipping = True
@@ -179,15 +183,22 @@ def skip_view(page: ft.Page):
             page.update()
         print(chooseResults)
 
-    def reverse_selection(e):
+    def select_all(e):
         task_list_controls = taskList.controls.copy()
         have_unfinish_task = any(
             map(lambda task: not task.disabled, task_list_controls)
         )
+        have_selection_some_task = len(
+            list(filter(lambda task: task.value, task_list_controls))
+        ) < len(task_list_controls)
 
         if have_unfinish_task:
-            for i in task_list_controls:
-                i.value = not i.value if i.disabled is False else i.value
+            if have_selection_some_task:
+                for task in task_list_controls:
+                    task.value = True
+            else:
+                for i in task_list_controls:
+                    i.value = not i.value if i.disabled is False else i.value
             page.update()
         else:
             show_snack_bar(page, "该课全部课程都已经刷完了 ^_^", ft.colors.GREEN)
@@ -196,17 +207,17 @@ def skip_view(page: ft.Page):
         ft.View(
             "/skip",
             [
-                taskIndicator,
+                ft.ProgressBar(ref=taskIndicator, value=0, visible=False),
                 ft.Container(
                     content=ft.Row(
                         [
-                            topTitle,
+                            ft.Text(ref=topTitle, value="请选择需要刷课的课程", size=30),
                             ft.Row(
                                 [
                                     ft.ElevatedButton(
                                         "全选",
                                         icon=ft.icons.ALL_INBOX,
-                                        on_click=reverse_selection,
+                                        on_click=select_all,
                                     ),
                                     ft.ElevatedButton(
                                         "Fuck",
