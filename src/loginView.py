@@ -18,10 +18,6 @@ def login_view(page: ft.page):
             page.core = Core(account.current.value, password.current.value)
             login_res = page.core.login()
             if login_res["status"] == "ok":
-                print(
-                    f"帐号: {account.current.value},"
-                    + f" 密码: {password.current.value}"
-                )
                 page.go("/course")
             else:
                 show_snack_bar(page, login_res["msg"], ft.colors.ERROR)

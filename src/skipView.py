@@ -5,6 +5,7 @@ import flet as ft
 
 from skipper import skipper as skp
 from time import sleep
+import logging
 
 
 def skip_view(page: ft.Page):
@@ -117,7 +118,8 @@ def skip_view(page: ft.Page):
             )
         )
 
-        print(page.isOnSkipping)
+        logging.info(f"Task List: {chooseResults}")
+        logging.info(f"Value of isOnSkipping: {page.isOnSkipping}")
 
         if len(chooseResults) == 0:
             show_snack_bar(page, "你还没有选择课程哟〜", ft.colors.ERROR)
@@ -181,7 +183,7 @@ def skip_view(page: ft.Page):
             page.dialog = success_dialog
             success_dialog.open = True
             page.update()
-        print(chooseResults)
+        logging.info("Skip is finished.")
 
     def select_all(e):
         task_list_controls = taskList.controls.copy()
