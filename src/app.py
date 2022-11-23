@@ -1,22 +1,31 @@
 # -*- coding: utf-8 -*-
 from loginView import login_view
 from skipView import skip_view
-from reportView import report_view
 
 import flet as ft
-import logging
 import tempfile
 import os
+import logging
+from logging.handlers import RotatingFileHandler
 
-log_location = f"{tempfile.gettempdir()+os.sep}fuckcqooc.log"
-logging.basicConfig(
-    filename=log_location,
-    filemode="w",
-    level=logging.INFO,
+folder_path = f"{tempfile.gettempdir()+os.sep}fuckcqooc"
+
+if not os.path.exists(folder_path):
+    os.makedirs(folder_path)
+else:
+    # Empty the folder
+    for file in os.listdir(folder_path):
+        os.remove(folder_path + os.sep + file)
+
+log_location = f"{folder_path+os.sep}fuckcqooc.log"
+logger = logging.getLogger()
+logger.setLevel(logging.INFO)
+handler = RotatingFileHandler(
+    log_location, "a", maxBytes=1024 * 1024 * 5, backupCount=5
 )
+logger.addHandler(handler)
 logging.info(f"Started logging to file {log_location}.")
 
-exception: BaseException
 font_family = {
     "Noto Sans SC": "/fonts/NotoSansSC-Regular.otf",
     "JetBrains Mono": "/fonts/JetBrainsMono-Regular.ttf",
@@ -33,22 +42,19 @@ def main(page: ft.Page):
             skip_view(page)
         page.update()
 
-    def on_error(e):
-        logging.error("error")
-
     def view_pop():
         page.views.pop()
         top_view = page.views[-1]
         page.go(top_view.route)
 
     page.core = None
+    page.log_folder_path = folder_path
     page.title = "Fuckcqooc"
     page.vertical_alignment = "center"
     page.horizontal_alignment = "center"
     page.fonts = font_family
     page.on_route_change = on_route_change
     page.on_view_pop = view_pop
-    page.on_error = on_error
     page.window_min_width = 800
     page.window_width = 800
     page.window_height = 600
@@ -56,28 +62,4 @@ def main(page: ft.Page):
     page.go(page.route)
 
 
-def report(page: ft.Page):
-    def on_route_change(e):
-        page.views.clear()
-        report_view(page)
-        page.update()
-
-    page.exception = exception
-    page.log = log_location
-    page.fonts = font_family
-    page.title = "Fuckcqooc"
-    page.vertical_alignment = "center"
-    page.horizontal_alignment = "center"
-    page.on_route_change = on_route_change
-    page.window_min_width = 800
-    page.window_width = 800
-    page.window_height = 600
-    page.window_min_height = 600
-    page.go(page.route)
-
-
-try:
-    ft.app(target=main, assets_dir="../assets")
-except BaseException as e:
-    exception = e
-    ft.app(target=report, assets_dir="../assets")
+ft.app(target=main, assets_dir="../assets")
