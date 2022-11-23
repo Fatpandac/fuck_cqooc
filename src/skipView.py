@@ -226,6 +226,7 @@ def skip_view(page: ft.Page):
                                         ref=topTitle,
                                         value="请选择需要刷课的课程",
                                         size=30,
+                                        font_family="Noto Sans SC",
                                     ),
                                     ft.Row(
                                         [

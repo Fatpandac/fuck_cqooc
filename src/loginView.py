@@ -32,7 +32,11 @@ def login_view(page: ft.page):
                         ft.Container(
                             content=ft.Column(
                                 [
-                                    ft.Text("Fuckcqooc", size=50),
+                                    ft.Text(
+                                        "Fuckcqooc",
+                                        size=50,
+                                        font_family="Noto Sans SC",
+                                    ),
                                     ft.TextField(
                                         ref=account,
                                         label="帐号",
