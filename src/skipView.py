@@ -39,6 +39,9 @@ def skip_view(page: ft.Page):
             # 主动调用，使用之前保存的当前课程信息
             index, course_id, title = page.current_course
         # 获取课程任务列表
+        taskIndicator.current.visible = True
+        taskIndicator.current.value = None
+        page.update()
         task_list = page.core.get_course_lessons(course_id).get("data")
 
         disabled_course_list_button(index)
@@ -55,6 +58,7 @@ def skip_view(page: ft.Page):
                     data=task.get("sectionId"),
                 )
             )
+        taskIndicator.current.visible = False
         page.update()
 
     def show_omit_title(title):
@@ -139,6 +143,7 @@ def skip_view(page: ft.Page):
 
             def start_skip_task():
                 """执行刷课任务"""
+                taskIndicator.current.value = 0
                 while skipper.getState() is not True:
                     taskIndicator.current.value = (
                         taskIndicator.current.value + (1 / 1000)
@@ -209,31 +214,41 @@ def skip_view(page: ft.Page):
         ft.View(
             "/skip",
             [
-                ft.ProgressBar(ref=taskIndicator, value=0, visible=False),
-                ft.Container(
-                    content=ft.Row(
-                        [
-                            ft.Text(ref=topTitle, value="请选择需要刷课的课程", size=30),
-                            ft.Row(
+                ft.Stack(
+                    [
+                        ft.ProgressBar(
+                            ref=taskIndicator, value=0, visible=False
+                        ),
+                        ft.Container(
+                            content=ft.Row(
                                 [
-                                    ft.ElevatedButton(
-                                        "全选",
-                                        icon=ft.icons.ALL_INBOX,
-                                        on_click=select_all,
+                                    ft.Text(
+                                        ref=topTitle,
+                                        value="请选择需要刷课的课程",
+                                        size=30,
                                     ),
-                                    ft.ElevatedButton(
-                                        "Fuck",
-                                        icon=ft.icons.DONE,
-                                        on_click=skip,
+                                    ft.Row(
+                                        [
+                                            ft.ElevatedButton(
+                                                "全选",
+                                                icon=ft.icons.ALL_INBOX,
+                                                on_click=select_all,
+                                            ),
+                                            ft.ElevatedButton(
+                                                "Fuck",
+                                                icon=ft.icons.DONE,
+                                                on_click=skip,
+                                            ),
+                                        ],
+                                        alignment="center",
+                                        spacing=50,
                                     ),
                                 ],
-                                alignment="center",
-                                spacing=50,
+                                alignment="spaceBetween",
                             ),
-                        ],
-                        alignment="spaceBetween",
-                    ),
-                    padding=10,
+                            padding=10,
+                        ),
+                    ]
                 ),
                 ft.Divider(
                     height=1,

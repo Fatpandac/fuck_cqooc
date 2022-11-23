@@ -2,6 +2,7 @@
 from hackcqooc.core import Core
 
 import threading
+import logging
 from time import sleep
 
 
@@ -22,11 +23,11 @@ class skipper(threading.Thread):
         self.state = False
 
     def run(self) -> None:
-        print("skip thread started")
+        logging.info("skip thread started")
         self.skip(self.sectionList)
 
     def skip(self, sectionList: list) -> None:
-        print("skip task started")
+        logging.info("skip task started")
         for i in sectionList:
             result = self.core.skip_section(i)
             if result["code"] == 200:
