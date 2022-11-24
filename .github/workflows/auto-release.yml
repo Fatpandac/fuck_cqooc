@@ -39,7 +39,7 @@ jobs:
           pip3 install -r requirements.txt
       - name: build app
         run: |
-          pyinstaller -F -w fuck_cqooc.pyw
+          pyinstaller src/app.py -F -w --add-data "assets;assets" --icon metadata/WinIcon.png
       - name: build package
         run: |
           cd dist && tar -zcvf fuckcqooc_win.tar.gz fuck_cqooc.exe
@@ -70,10 +70,11 @@ jobs:
           pip3 install -r requirements.txt
       - name: build app
         run: |
-          pyinstaller -F -w fuck_cqooc.pyw
+          pyinstaller src/app.py -F -w --add-data "assets:assets" --icon metadata/MacIcon.png
       - name: build package
         run: |
-          cd dist && tar -zcvf fuckcqooc_macos.tar.gz fuck_cqooc.app
+          mv dist/app.app ./fuckcqooc.app
+          cd fuckcqooc.app && tar -zcvf fuckcqooc_macos.tar.gz fuckcqooc.app
       - name: upload
         uses: actions/upload-release-asset@v1
         env:

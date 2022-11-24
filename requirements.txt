@@ -3,7 +3,7 @@ beartype==0.11.0 ; python_full_version >= '3.7.0'
 certifi==2022.9.24 ; python_version >= '3.6'
 charset-normalizer==2.1.1 ; python_full_version >= '3.6.0'
 flet==0.1.65
-hackcqooc==0.0.5
+hackcqooc==0.0.7
 idna==3.4 ; python_version >= '3.5'
 js2py==0.74
 oauthlib==3.2.2 ; python_version >= '3.6'
