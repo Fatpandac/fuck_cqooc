@@ -20,7 +20,7 @@
 
 1. 安装
     - 源码
-    下载源码后运行`pip install -r requirements.txt` 或运行 Python 虚拟环境运行 `pipenv install`,之后再双击打开`fuck_cqooc.pyw`。
+    下载源码后运行 `pip install -r requirements.txt` 或运行 Python 虚拟环境运行 `pipenv install` ,之后再运行 `python3 src/app.py`。
     - 二进制文件
     对于 Windows/Mac 系统用户，你还可以选择使用编译好的文件，[在这下载](https://github.com/Fatpandac/fuck_cqooc/releases)。
 2. 启动程序
