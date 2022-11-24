@@ -6,6 +6,7 @@ name = "pypi"
 [packages]
 hackcqooc = "*"
 flet = "*"
+pillow = "*"
 
 [dev-packages]
 pre-commit = "*"
