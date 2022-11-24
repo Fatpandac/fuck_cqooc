@@ -111,3 +111,6 @@ dmypy.json
 
 # macos
 .DS_Store
+
+# Visual Studio Code Run/Debug configuration
+.vscode/
