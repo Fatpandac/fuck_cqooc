@@ -1,3 +1,23 @@
+[project]
+name = "fuck_cqooc"
+version = "v0.0.4-beta"
+description = "一个重庆高校在线开放课程平台刷课工具。"
+authors = [
+    { name = "Fatpandac", email = "i@fatpandac.com" }
+]
+readme = "README.md"
+requires-python = ">= 3.8"
+license = { text = "MIT" }
+dependencies = ["hackcqooc~=0.0.8", "flet~=0.7.1", "pillow~=9.5.0"]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.rye]
+managed = true
+dev-dependencies = ["pre-commit~=3.3.1"]
+
 [tool.black]
 line-length = 79
 include = '\.pyi?$'
