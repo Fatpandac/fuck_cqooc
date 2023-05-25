@@ -27,19 +27,22 @@ jobs:
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@master
-      - name: Set up Python 3.7
+      - name: Set up Python 3.8
         uses: actions/setup-python@v1
         with:
-          python-version: 3.7
+          python-version: 3.8
       - name: install pyinstaller
         run: |
           pip3 install pyinstaller # 可替换为自己项目的编译命令
       - name: setup env
         run: |
+          pip install --upgrade pip
           pip3 install -r requirements.txt
+
       - name: build app
         run: |
           pyinstaller src/app.py -F -w --add-data "assets;assets" --icon metadata/WinIcon.png
+
       - name: build package
         run: |
           cd dist
@@ -60,19 +63,22 @@ jobs:
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@master
-      - name: Set up Python 3.7
+      - name: Set up Python
         uses: actions/setup-python@v1
         with:
-          python-version: 3.7
+          python-version: 3.8
       - name: install pyinstaller
         run: |
           pip3 install pyinstaller # 可替换为自己项目的编译命令
       - name: setup env
         run: |
+          pip install --upgrade pip
           pip3 install -r requirements.txt
+
       - name: build app
         run: |
           pyinstaller src/app.py -F -w --add-data "assets:assets" --icon metadata/MacIcon.png
+
       - name: build package
         run: |
           cd dist
