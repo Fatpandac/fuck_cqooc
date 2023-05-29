@@ -7,15 +7,16 @@
 #   all-features: false
 
 -e file:.
-anyio==3.6.2
+anyio==3.7.0
 backports-zoneinfo==0.2.1
 certifi==2023.5.7
 charset-normalizer==3.1.0
 docopt==0.6.2
+exceptiongroup==1.1.1
 flet==0.7.4
 flet-core==0.7.4
 h11==0.14.0
-hackcqooc==0.0.10
+hackcqooc==0.0.11
 httpcore==0.16.3
 httpx==0.23.3
 idna==3.4
