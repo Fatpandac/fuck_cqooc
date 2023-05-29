@@ -20,7 +20,7 @@
 
 1. 安装
     - 源码
-    下载源码后运行 `pip install -r requirements.txt` 或运行 Python 虚拟环境运行 `pipenv install` ,之后再运行 `python3 src/app.py`。
+    下载源码后运行 `pip install -r requirements.txt`
     - 二进制文件
     对于 Windows/Mac 系统用户，你还可以选择使用编译好的文件，[在这下载](https://github.com/Fatpandac/fuck_cqooc/releases)。
 2. 启动程序
@@ -41,6 +41,12 @@
 
 这是因为重庆高校在线课程平台服务器的管控策略。短时间跳过太多任务，你可能会遭到网站临时屏蔽。屏蔽不会持续太久，不到一分钟就会解除。
 但为了保证所有任务都能成功跳过，程序设置跳过每个任务之间都会间隔一段时间，具体是30秒。
+
+## 参与开发
+
+我们欢迎任何类型的 PR 以及 issue。🎉
+
+本项目使用 Rye 构建环境，使用 `rye`，先[安装 rye](https://rye-up.com/guide/installation/)，之后运行命令 `rye sync`，再运行 `rye run dev` 即可。
 
 ## Special Thanks
 
