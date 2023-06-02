@@ -2,7 +2,7 @@
 
 ![GitHub](https://img.shields.io/github/license/Fatpandac/fuck_cqooc)  ![GitHub all releases](https://img.shields.io/github/downloads/Fatpandac/fuck_cqooc/total)  ![GitHub release (latest by date including pre-releases)](https://img.shields.io/github/v/release/Fatpandac/fuck_cqooc?include_prereleases)  [![pre-commit.ci status](https://results.pre-commit.ci/badge/github/Fatpandac/fuck_cqooc/master.svg)](https://results.pre-commit.ci/latest/github/Fatpandac/fuck_cqooc/master)
 
-![fuckcqooc GUI](/metadata/UI.png)
+![fuckcqooc GUI](./metadata/UI.png)
 
 <details>
 <summary>这是一个简单的 「cqooc」(http://www.cqooc.com) 刷课工具。</summary>
