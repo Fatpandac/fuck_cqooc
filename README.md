@@ -1,6 +1,6 @@
 <h1 align="center">fuckcqooc</h1>
 
-![GitHub](https://img.shields.io/github/license/Fatpandac/fuck_cqooc)  ![GitHub all releases](https://img.shields.io/github/downloads/Fatpandac/fuck_cqooc/total)  ![GitHub release (latest by date including pre-releases)](https://img.shields.io/github/v/release/Fatpandac/fuck_cqooc?include_prereleases)  [![pre-commit.ci status](https://results.pre-commit.ci/badge/github/Fatpandac/fuck_cqooc/master.svg)](https://results.pre-commit.ci/latest/github/Fatpandac/fuck_cqooc/master)
+![GitHub](https://img.shields.io/github/license/Fatpandac/fuck_cqooc)  ![GitHub all releases](https://img.shields.io/github/downloads/Fatpandac/fuck_cqooc/total)  ![GitHub release (latest by date including pre-releases)](https://img.shields.io/github/v/release/Fatpandac/fuck_cqooc?include_prereleases)  [![pre-commit.ci status](https://results.pre-commit.ci/badge/github/Fatpandac/fuck_cqooc/master.svg)](https://results.pre-commit.ci/latest/github/Fatpandac/fuck_cqooc/master) [![Discord](https://img.shields.io/discord/1100683975321722980?label=Discord)](https://discord.gg/KMQBfKHzRm)
 
 ![fuckcqooc GUI](./metadata/UI.png)
 
