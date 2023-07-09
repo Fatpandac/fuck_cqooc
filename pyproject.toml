@@ -37,3 +37,6 @@ exclude = '''
   | dist
 )/
 '''
+
+[tool.ruff]
+line-length = 79

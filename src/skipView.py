@@ -49,7 +49,9 @@ def skip_view(page: ft.Page):
 
         taskList.controls.clear()
         for task in task_list:
-            title = "没有描述" if task.get("title") is None else task.get("title")
+            title = (
+                "没有描述" if task.get("title") is None else task.get("title")
+            )  # noqa: E501
             taskList.controls.append(
                 ft.Checkbox(
                     label=title,
@@ -62,7 +64,9 @@ def skip_view(page: ft.Page):
         page.update()
 
     def show_omit_title(title):
-        """当 title 长度大于 16 时返回缩略内容，显示文字为14长度其余以 ... 替代"""
+        """
+        当 title 长度大于 16 时返回缩略内容，显示文字为14长度其余以 ... 替代
+        """
         return f"{title[:14]}..." if len(title) > 16 else title
 
     course_dict = page.core.get_course()
@@ -92,7 +96,9 @@ def skip_view(page: ft.Page):
     else:
 
         def close_alert():
-            """关闭对话框"""
+            """
+            关闭对话框
+            """
             no_data_alert.open = False
             page.update()
 
@@ -128,7 +134,9 @@ def skip_view(page: ft.Page):
         if len(chooseResults) == 0:
             show_snack_bar(page, "你还没有选择课程哟〜", ft.colors.ERROR)
         elif page.isOnSkipping:
-            show_snack_bar(page, "有刷课任务正在进行，请结束后再试〜", ft.colors.ERROR)
+            show_snack_bar(
+                page, "有刷课任务正在进行，请结束后再试〜", ft.colors.ERROR
+            )  # noqa: E501
         else:
 
             def close_alert(e):
@@ -208,7 +216,9 @@ def skip_view(page: ft.Page):
                     i.value = not i.value if i.disabled is False else i.value
             page.update()
         else:
-            show_snack_bar(page, "该课全部课程都已经刷完了 ^_^", ft.colors.GREEN)
+            show_snack_bar(
+                page, "该课全部课程都已经刷完了 ^_^", ft.colors.GREEN
+            )  # noqa: E501
 
     page.views.append(
         ft.View(
