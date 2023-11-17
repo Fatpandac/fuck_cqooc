@@ -1,6 +1,6 @@
 [project]
 name = "fuck_cqooc"
-version = "v0.0.5-beta"
+version = "v0.0.6-beta"
 description = "一个重庆高校在线开放课程平台刷课工具。"
 authors = [
     { name = "Fatpandac", email = "i@fatpandac.com" }
