@@ -105,7 +105,9 @@ def skip_view(page: ft.Page):
         no_data_alert = ft.AlertDialog(
             modal=True,
             title=ft.Text("提示"),
-            content=ft.Text(f"获取课程数据失败，错误代码是{course_dict.get('code')}。"),
+            content=ft.Text(
+                f"获取课程数据失败，错误代码是{course_dict.get('code')}。"
+            ),
             actions=[
                 ft.TextButton("好", on_click=close_alert),
             ],
