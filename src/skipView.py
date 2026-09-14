@@ -1,11 +1,10 @@
-# -*- coding: utf-8 -*-
-from components import show_snack_bar
+import logging
+from time import sleep
 
 import flet as ft
 
+from components import show_snack_bar
 from skipper import skipper as skp
-from time import sleep
-import logging
 
 
 def skip_view(page: ft.Page):
@@ -51,7 +50,7 @@ def skip_view(page: ft.Page):
         for task in task_list:
             title = (
                 "没有描述" if task.get("title") is None else task.get("title")
-            )  # noqa: E501
+            )
             taskList.controls.append(
                 ft.Checkbox(
                     label=title,
@@ -138,7 +137,7 @@ def skip_view(page: ft.Page):
         elif page.isOnSkipping:
             show_snack_bar(
                 page, "有刷课任务正在进行，请结束后再试〜", ft.colors.ERROR
-            )  # noqa: E501
+            )
         else:
 
             def close_alert(e):
@@ -220,7 +219,7 @@ def skip_view(page: ft.Page):
         else:
             show_snack_bar(
                 page, "该课全部课程都已经刷完了 ^_^", ft.colors.GREEN
-            )  # noqa: E501
+            )
 
     page.views.append(
         ft.View(
