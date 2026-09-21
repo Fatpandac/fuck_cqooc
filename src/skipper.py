@@ -1,9 +1,8 @@
-# -*- coding: utf-8 -*-
-from hackcqooc.core import Core
-
-import threading
 import logging
+import threading
 from time import sleep
+
+from hackcqooc.core import Core
 
 
 class skipper(threading.Thread):
