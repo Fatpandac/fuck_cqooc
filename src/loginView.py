@@ -1,8 +1,7 @@
-# -*- coding: utf-8 -*-
-from components import show_snack_bar
-
 import flet as ft
 from hackcqooc.core import Core
+
+from components import show_snack_bar
 
 
 def login_view(page: ft.page):
