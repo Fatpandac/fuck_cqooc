@@ -1,12 +1,12 @@
-# -*- coding: utf-8 -*-
-from loginView import login_view
-from skipView import skip_view
+import logging
+import os
+import tempfile
+from logging.handlers import RotatingFileHandler
 
 import flet as ft
-import tempfile
-import os
-import logging
-from logging.handlers import RotatingFileHandler
+
+from loginView import login_view
+from skipView import skip_view
 
 folder_path = f"{tempfile.gettempdir()+os.sep}fuckcqooc"
 
